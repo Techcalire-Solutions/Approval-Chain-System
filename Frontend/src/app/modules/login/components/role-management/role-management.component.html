@@ -1,0 +1,68 @@
+<mat-toolbar class="bg-blue-900">
+  <p style="color:white"> ADD ROLES</p>
+  <button mat-mini-fab color="primary" type="button" style="margin-left: auto;"
+    aria-label="Example icon button with a home icon" class="d-block mr-0 ml-auto" (click)="onCancelClick()">
+    <mat-icon>close</mat-icon>
+  </button>
+</mat-toolbar>
+
+<form [formGroup]="roleForm" (ngSubmit)="onSubmit()">
+  <mat-card class="background">
+    <mat-card-content >
+
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="full-width">
+            <input matInput placeholder="Role" formControlName="roleName">
+            <mat-error *ngIf="roleForm.controls['roleName'].hasError('required')">
+              Name <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+    </mat-card-content>
+
+    <mat-card-actions>
+      <button *ngIf="!isEdit" mat-raised-button color="primary" type="submit" [disabled]="!roleForm.valid">ADD</button>&nbsp;&nbsp;
+      <button *ngIf="isEdit" color="primary"   mat-raised-button type="button" [disabled]="!roleForm.valid" (click)="edit()">UPDATE</button>&nbsp;&nbsp;
+      <button color="primary" mat-raised-button type="button" (click)="clear()">CLEAR</button>&nbsp;&nbsp;
+      <!-- <button mat-mini-fab color="primary" aria-label="Example icon button with a home icon" (click)="onCancelClick()">
+        <mat-icon>arrow_back</mat-icon>
+      </button> -->
+    </mat-card-actions>
+  </mat-card>
+</form>
+
+
+
+
+<!----------------------------------ROLE  TABLE   STARTS------------------------------------------------------------>
+
+
+<table mat-table *ngIf="roles" [dataSource]="roles" matSort class="mat-elevation-z8">
+  <ng-container matColumnDef="roleName">
+     <th mat-header-cell *matHeaderCellDef mat-sort-header>Role Name </th>
+     <td mat-cell *matCellDef="let element"> {{element.roleName}} </td>
+   </ng-container>
+
+
+   <ng-container matColumnDef="action">
+    <th mat-header-cell *matHeaderCellDef>Manage </th>
+    <td mat-cell *matCellDef="let element">
+      <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+      <!-- <i  (click)="editRoom(element._id)"  class="fa fa-edit" style="font-size: 20px; color:green"></i>
+      &nbsp;&nbsp;
+      <i  (click)="deleteRoom(element._id)" class="fa fa-trash" style="font-size: 20px; color:red"></i> -->
+      <i  class="fa fa-edit" (click)="editFunction(element.id)" style="font-size: 16px; color:green"></i>
+      &nbsp;&nbsp;
+      <i class="fa fa-trash" (click)="deleteFunction(element.id)" style="font-size: 16px; color:rgb(151, 70, 70)"></i>
+
+
+    </td>
+  </ng-container>
+
+   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+   <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+ </table>
+<!----------------------------------ROLE  TABLE   ENDS------------------------------------------------------------>
+
