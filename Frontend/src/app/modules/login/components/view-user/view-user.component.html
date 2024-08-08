@@ -1,0 +1,73 @@
+<!--
+Responsive HTML Table With Pure CSS - Web Design/UI Design
+
+Code written by:
+👨🏻‍⚕️ Coding Design (Jeet Saru)
+
+> You can do whatever you want with the code. However if you love my content, you can **SUBSCRIBED** my YouTube Channel.
+
+🌎link: www.youtube.com/codingdesign
+ -->
+ <!DOCTYPE html>
+ <html lang="en">
+
+ <mat-spinner *ngIf="submittingForm" class="spinner-overlay"></mat-spinner>
+ <body>
+     <main class="table" id="customers_table">
+         <section class="table__header">
+          <div class="row">
+            <div class="col">
+              <h1>USERS</h1>
+            </div>
+
+            <div class="col">
+              <div class="input-group">
+                <input type="search" placeholder="Search Data..." (keyup)="applyFilter($event)">
+              </div>
+            </div>
+
+            <div class="col">
+              <mat-icon style="margin-top: 20px;" class="icon" routerLink="add">playlist_add_circle</mat-icon>
+            </div>
+
+            <!-- <div class="col">
+              <mat-icon>exit_to_app</mat-icon>
+            </div> -->
+          </div>
+
+         </section>
+         <section class="table__body">
+             <table>
+                 <thead>
+                     <tr>
+                         <th> Name</th>
+                         <th> Email</th>
+                         <th> PoneNumber</th>
+                         <th> Role</th>
+                         <th> Status</th>
+                         <th> Manage</th>
+                     </tr>
+                 </thead>
+                 <tbody>
+                     <tr *ngFor="let user of users">
+                         <td> {{user.name}} </td>
+                         <td> {{user.email}} </td>
+                         <td> {{user.phoneNumber}} </td>
+                         <td> {{user.role.roleName}} </td>
+                         <td>
+                          <mat-slide-toggle [(ngModel)]="user.status" [ngModelOptions]="{standalone: true}" (change)="onToggleChange($event, user.id)"></mat-slide-toggle>
+                         </td>
+                         <td>
+                          <mat-icon class="icon" [routerLink]="['edit', user.id]">edit_note</mat-icon>
+                          <mat-icon class="icon" (click)="deleteUser(user.id)">delete</mat-icon>
+                         </td>
+                     </tr>
+                 </tbody>
+             </table>
+         </section>
+     </main>
+     <script src="script.js"></script>
+
+ </body>
+
+ </html>

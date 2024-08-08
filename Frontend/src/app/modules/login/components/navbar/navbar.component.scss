@@ -1,38 +1,6 @@
 /*=============== GOOGLE FONTS ===============*/
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap");
 
-/*=============== VARIABLES CSS ===============*/
-:root {
-  --header-height: 3.5rem;
-
-  /*========== Colors ==========*/
-  /*Color mode HSL(hue, saturation, lightness)*/
-  --black-color: hsl(220, 24%, 12%);
-  --black-color-light: hsl(220, 24%, 15%);
-  --black-color-lighten: hsl(220, 20%, 18%);
-  --white-color: #fff;
-  --body-color: hsl(220, 100%, 97%);
-
-  /*========== Font and typography ==========*/
-  /*.5rem = 8px | 1rem = 16px ...*/
-  --body-font: "Montserrat", sans-serif;
-  --normal-font-size: .938rem;
-
-  /*========== Font weight ==========*/
-  --font-regular: 400;
-  --font-semi-bold: 600;
-
-  /*========== z index ==========*/
-  --z-tooltip: 10;
-  --z-fixed: 100;
-}
-
-/*========== Responsive typography ==========*/
-@media screen and (min-width: 1024px) {
-  :root {
-    --normal-font-size: 1rem;
-  }
-}
 
 /*=============== BASE ===============*/
 * {
@@ -94,11 +62,6 @@ a {
 
 .nav__logo {
   display: inline-flex;
-
-  // column-gap: .25rem;
-  // font-weight: 600;
-  /* Color highlighting when pressed on mobile devices */
-  /*-webkit-tap-highlight-color: transparent;*/
 }
 
 .nav__logo i {
@@ -198,7 +161,7 @@ a {
 .dropdown__sublink {
   padding: 1.25rem 1.25rem 1.25rem 2.5rem;
   color: #fff;
-  background-color: hsl(220, 24%, 15%);
+  background-color: rgb(18, 36, 85);
   display: flex;
   align-items: center;
   column-gap: .5rem;
@@ -242,12 +205,21 @@ a {
 }
 
 .dropdown__sublink {
-  background-color: hsl(220, 20%, 18%);
+  background-color: rgb(18, 36, 85);
 }
 
 /*=============== BREAKPOINTS ===============*/
 /* For small devices */
-@media screen and (max-width: 340px) {
+@media screen and (max-width: 400px) {
+  .content-section{
+    min-height: auto;
+  }
+
+
+  .vector-icon{
+    display: none;
+  }
+
   .container {
     margin-inline: 1rem;
   }
@@ -256,18 +228,47 @@ a {
     padding-inline: 1rem;
   }
 }
-
 /* For large devices */
 @media screen and (min-width: 1118px) {
+  .content-section{
+    min-height: auto;
+  }
+
+  .vector-icon {
+    width: 25.3px;
+    position: relative;
+    height: 26px;
+    color:#060501;
+  }
+
+  .vector-icon:hover{
+    color: #ca7f46;
+    font-weight: bolder;
+    cursor: pointer;
+    // font-size: 50px;
+  }
+
+  .vector-parent {
+    position: absolute;
+    // top: 30px;
+    right: 30px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 21px;
+  }
+
   .container {
-    margin-inline: auto;
+    // margin-inline: auto;
   }
 
   .nav {
-    height: calc(3.5rem + 2rem);
+    height: 3.5rem;
     display: flex;
     justify-content: space-between;
   }
+
   .nav__toggle {
     display: none;
   }
@@ -275,6 +276,7 @@ a {
     height: 100%;
     display: flex;
     column-gap: 3rem;
+
   }
   .nav__link {
     height: 100%;
@@ -282,8 +284,10 @@ a {
     justify-content: initial;
     column-gap: .25rem;
   }
+
   .nav__link:hover {
     background-color: transparent;
+    transform: translateY(-10px)
   }
 
   .dropdown__item,
@@ -321,7 +325,7 @@ a {
   /* Show dropdown menu */
   .dropdown__item:hover .dropdown__menu {
     opacity: 1;
-    top: 5.5rem;
+    top: 3rem;
     pointer-events: initial;
     transition: top .3s;
   }
@@ -332,5 +336,113 @@ a {
     top: 0;
     pointer-events: initial;
     transition: top .3s;
+  }
+}
+
+.vector-icon {
+  width: 25.3px;
+  position: relative;
+  height: 26px;
+  color:#060501;
+}
+
+.vector-icon:hover{
+  color: #ca7f46;
+  font-weight: bolder;
+  cursor: pointer;
+  // font-size: 50px;
+}
+
+.vector-parent {
+  position: absolute;
+  top: 5px;
+  right: 50px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 21px;
+  background-color: rgb(41, 78, 172);
+  padding: 10px; /* Add some padding to make the curved corners more noticeable */
+  border-radius: 15px; /* Adjust this value to change the roundness of the corners */
+}
+
+.bottom-bar {
+  background: linear-gradient(0deg,#014f43, #b0c8c5);
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.25); /* Set your desired background color */
+  padding: 10px; /* Adjust the padding as needed */
+  text-align: center; /* Center-align the content */
+}
+
+/* Style for the line-1 image */
+.bottom-bar-child {
+  width: 50px; /* Set the width of the image as needed */
+  height: auto; /* Maintain aspect ratio */
+  margin-right: 10px; /* Adjust the margin as needed */
+}
+
+/* Style for the powered-by text */
+.powered-by {
+  font-size: 14px; /* Set the font size as needed */
+  color: #333; /* Set the text color */
+}
+
+.breadcrumb {
+  margin-top: 10px;
+  list-style: none;
+  padding: 0;
+  //margin: 0;
+
+  .breadcrumb-item {
+    display: inline-block;
+
+    &:not(:last-child) {
+      margin-right: 5px; /* Adjust spacing between breadcrumb items */
+    }
+
+    .active {
+      color: #777; /* Color for the active/last breadcrumb item */
+    }
+
+    a {
+      color: #207174; /* Color for breadcrumb links */
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+.content-section{
+  min-height: auto;
+}
+
+.breadcrumb {
+  margin-top: 10px;
+  list-style: none;
+  padding: 0;
+  //margin: 0;
+
+  .breadcrumb-item {
+    display: inline-block;
+
+    &:not(:last-child) {
+      margin-right: 5px; /* Adjust spacing between breadcrumb items */
+    }
+
+    .active {
+      color: #777; /* Color for the active/last breadcrumb item */
+    }
+
+    a {
+      color: #207174; /* Color for breadcrumb links */
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
   }
 }

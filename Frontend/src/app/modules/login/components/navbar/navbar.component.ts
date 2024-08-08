@@ -22,4 +22,8 @@ export class NavbarComponent implements OnInit {
   ngOnInit(): void {
     this.showMenu('nav-toggle', 'nav-menu');
   }
+
+  logout(){
+    
+  }
 }

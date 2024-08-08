@@ -7,16 +7,17 @@ import {
   HttpErrorResponse
 } from '@angular/common/http';
 import { Observable, catchError, throwError } from 'rxjs';
-import { AuthService } from '../auth/auth.service';
 import { Router } from '@angular/router';
+import { LoginService } from '../login.service';
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
 
-  constructor(private authService: AuthService, private router:Router) {}
+  constructor(private router: Router) {}
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-    const myToken = this.authService.getJWTToken()
+    const myToken = localStorage.getItem("JWT_TOKEN");
+    console.log(myToken);
 
     if(myToken){
       request = request.clone({
@@ -27,13 +28,15 @@ export class TokenInterceptor implements HttpInterceptor {
     .pipe(
       catchError((err: any)=>{
         if(err instanceof HttpErrorResponse){
-          console.log(err.status)
           if(err.status === 403){
             alert('Token is expired, Please login again...')
             this.router.navigate([''])
           }
         }
-        return throwError(()=>new Error("Some other error occured"))
+        return throwError(()=>{
+
+          alert(err.error.text)
+        })
       })
    );
   }

@@ -8,11 +8,10 @@ import { DeleteComponent } from './components/delete/delete.component';
 import { LoginComponent } from './components/login/login.component';
 import { LogoutComponent } from './components/logout/logout.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
-import { RegisterComponent } from './components/register/register.component';
-import { RegisterSettingsComponent } from './components/register-settings/register-settings.component';
-import { RoleManagementComponent } from './components/role-management/role-management.component';
-import { UserManagementComponent } from './components/user-management/user-management.component';
 import { MaterialModule } from './material/material.module';
+import { AddUserComponent } from './components/add-user/add-user.component';
+import { ViewUserComponent } from './components/view-user/view-user.component';
+import { RoleManagementComponent } from './components/role-management/role-management.component';
 
 
 @NgModule({
@@ -23,10 +22,9 @@ import { MaterialModule } from './material/material.module';
       LoginComponent,
       LogoutComponent,
       NavbarComponent,
-      RegisterComponent,
-      RegisterSettingsComponent,
-      RoleManagementComponent,
-      UserManagementComponent
+      AddUserComponent,
+      ViewUserComponent,
+      RoleManagementComponent
   ],
   imports: [
     CommonModule,
