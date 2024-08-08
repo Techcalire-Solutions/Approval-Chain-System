@@ -1,0 +1,49 @@
+/* You can add global styles to this file, and also import other style files */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
+html, body {
+  height: 100%;
+  max-width: 100%; /* Corrected max-width value */
+  margin: 0; /* Add margin to remove default body margin */
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  overflow-x: hidden; /* Hide horizontal scrollbar */
+}
+
+body, html {
+  height: 100%; /* Make sure both HTML and body have 100% height */
+}
+
+.content {
+  flex: 1;
+  position: relative;
+  height: 100%;
+  padding-bottom: 1%;
+}
+
+footer {
+  background-color: #333;
+  color: #fff;
+  padding: 10px;
+  text-align: center;
+}
+
+/* Additional styles, if needed */
+
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+mat-step-header {
+  background-color: white; /* Default background for step headers */
+  cursor: pointer; /* Change cursor to pointer to indicate it's clickable */
+}
+
+mat-step-header.active {
+  background-color: rgb(1, 9, 12); /* Active step background color */
+}
+
+
+
