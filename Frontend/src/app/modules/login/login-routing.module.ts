@@ -15,7 +15,8 @@ const routes: Routes = [
         {path: 'add', component: AddUserComponent, data: {breadcrumb: 'Add'}},
         {path: 'edit/:id', component: AddUserComponent, data: {breadcrumb: 'Edit'}}
       ]},
-      {path: 'role',  data: {breadcrumb: 'Role'}, component: RoleManagementComponent}
+      {path: 'role',  data: {breadcrumb: 'Role'}, component: RoleManagementComponent},
+      {path:'invoice', loadChildren:()=>import('../invoice/invoice.module').then(x=>x.InvoiceModule), data: {breadcrumb: 'Invoice'}},
     ]
   },
 ];

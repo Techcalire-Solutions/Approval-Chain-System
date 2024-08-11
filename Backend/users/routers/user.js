@@ -174,12 +174,13 @@ router.get('/findone/:id', async(req,res)=>{
 
 router.patch('/update/:id', async(req,res)=>{
   const { name, email, phoneNumber, password, roleId, status} = req.body;
+  const pass = await bcrypt.hash(password, 10);
   try {
     let result = await User.findByPk(req.params.id);
     result.name = name;
     result.email = email;
     result.phoneNumber = phoneNumber;
-    result.password = password;
+    result.password = pass;
     result.roleId = roleId;
     result.status = status;
 

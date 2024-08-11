@@ -1,0 +1,43 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Upload</title>
+  </head>
+
+  <body>
+
+    <div class="wrapper">
+      <header>File Uploader</header>
+      <form [formGroup]="piForm">
+        <mat-form-field appearance="outline">
+          <mat-label>Outline form field</mat-label>
+          <input matInput placeholder="Placeholder" formControlName="piNo">
+          <!-- <mat-icon matSuffix>sentiment_very_satisfied</mat-icon> -->
+        </mat-form-field>
+      </form>
+      <form action="#" #form class="form">
+        <input type="file" class="file-input" hidden #fileInput>
+        <span class="material-icons">cloud_upload</span>
+        <p>Browse file to upload</p>
+      </form>
+      <section class="progress-area" #progressArea>
+        <li class="row" *ngIf="file">
+          <span class="material-icons">file_copy</span>
+          <div class="content">
+            <div class="details">
+              <span class="name" *ngIf="uploadComplete">{{file.name}} . Uploading</span>
+              <mat-progress-bar mode="indeterminate" *ngIf="uploadComplete"></mat-progress-bar>
+              <span *ngIf="!uploadComplete" class="name">{{file.name}} . Uploaded</span>
+              <!-- <span class=percent">${fileLoaded}%</span> -->
+            </div>
+          </div>
+        </li>
+      </section>
+
+      <button  mat-raised-button type="button" class="btn btn-success" (click)="onSubmit()" [disabled]="!piForm.valid">
+        <span class="material-icons" style="font-size: 25px;">save</span>
+      </button>
+    </div>
+  </body>
+</html>
