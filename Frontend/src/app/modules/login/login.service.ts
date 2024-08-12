@@ -81,11 +81,6 @@ export class LoginService {
     localStorage.removeItem('token')
    }
 
-   registerUser(data: any)
-   {
-    return this._http.post(this.url + '/register', data)
-   }
-
    addAttendance(data: any){
     return this._http.post(this.url + '/attendance', data)
   }
@@ -99,28 +94,48 @@ export class LoginService {
   // }
 
   //  NEW
+
+
+  //---------------------------User-------------------------------------
+  registerUser(data : any){
+    return this._http.post(this.url + '/user/add', data)
+  }
+
+  getUser(search?:string, page?: number, pageSize?: number): Observable<User[]>{
+    return this._http.get<User[]>(this.url + `/user/find/?search=${search}&page=${page}&pageSize=${pageSize}`);
+  }
+
+  getUserByName(search: string): Observable<User[]>{
+    return this._http.get<User[]>(this.url + `/user/search/name/?search=${search}`)
+  }
+
+  getUserById(id: number):Observable<User>{
+    return this._http.get<User>(this.url + '/user/findone/'+id)
+  }
+
+  getPaginatedUser(search:string, page: number, pageSize: number): Observable<User[]>{
+    return this._http.get<User[]>(this.url + '/user/add/' + `?search=${search}&page=${page}&pageSize=${pageSize}`);
+  }
+
+  updateUser(id:number, data:any){
+    return this._http.patch<User>(this.url+'/user/update/' + id, data);
+  }
+
+  deleteUser(id:Number){
+    return this._http.delete(this.url+'/user/delete/'+id);
+  }
+
+  updateUserStatus(id: number, data: any){
+    return this._http.patch<User>(this.url+'/user/statusupdate/' + id, data);
+  }
+
+  // ROLE..........
   addRole(data: any) {
     return this._http.post(this.url + "/role", data);
   }
 
-  //---------------------------User-------------------------------------
-  getUser(): Observable<User[]> {
-    return this._http.get<User[]>(this.url + "/register");
-  }
-
-  deleteUser(id: number) {
-    return this._http.delete(this.url + "/register/" + id);
-  }
-  updateUser(id: number, data: any): Observable<User> {
-    return this._http.patch<User>(this.url + "/register/" + id, data);
-  }
-  getUserById(id: number): Observable<User> {
-    return this._http.get<User>(this.url + "/register/" + id);
-  }
-
-  // ROLE..........
-  getRole(): Observable<Role[]> {
-    return this._http.get<Role[]>(this.url + "/role");
+  getRole(filterValue?: string, page?: number, pagesize?:number): Observable<Role[]> {
+    return this._http.get<Role[]>(this.url + `/role/find/?search=${filterValue}&page=${page}&pageSize=${pagesize}`);
   }
 
   deleteRole(id: number) {

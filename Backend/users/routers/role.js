@@ -21,11 +21,12 @@ router.post('/', async (req, res) => {
     }
 })
 
-router.get('/', async (req, res) => {
+router.get('/find', async (req, res) => {
   try {
     let whereClause = {}
     let limit;
     let offset;
+    
     if (req.query.pageSize != 'undefined' && req.query.page != 'undefined') {
       limit = req.query.pageSize;
       offset = (req.query.page - 1) * req.query.pageSize;
@@ -64,11 +65,11 @@ router.get('/', async (req, res) => {
     }
 
     const role = await Role.findAll({
-      order:['id'], where: whereClause, limit, offset
+      order:['id'], limit, offset, where: whereClause
     })
 
     let totalCount;
-    totalCount = await Role.count();
+    totalCount = await Role.count({where: whereClause});
     
     if (req.query.page != 'undefined' && req.query.pageSize != 'undefined') {
       const response = {

@@ -19,6 +19,15 @@ app.use('/role', role);
 app.use('/user', user);
 app.use('/auth', auth);
 
+const invoice = require('../invoices/routers/invoice');
+const pi = require('../invoices/routers/performaInvoice');
+const piStatus = require('../invoices/routers/invoiceStatus');
+app.use('/invoice', invoice);
+app.use('/performaInvoice', pi);
+app.use('/invoiceStatus', piStatus);
+
+app.use('/invoices/uploads', express.static(path.join(__dirname, '../invoices/uploads')));
+
 const port = process.env.PORT || 8000;
 
 app.listen(port, () => {

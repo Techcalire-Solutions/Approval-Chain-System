@@ -8,4 +8,5 @@ export interface User{
     password: string,
     roleId: number
     role:Role
+    status: boolean
 }
