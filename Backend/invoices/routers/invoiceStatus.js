@@ -6,9 +6,9 @@ const PerformaInvoiceStatus = require('../models/invoiceStatus');
 const PerformaInvoice = require('../models/performaInvoice');
 
 router.post('/updatestatus', authenticateToken, async (req, res) => {
-    const { performaInvoiceId, status} = req.body;
+    const { performaInvoiceId, status, remarks} = req.body;
     try {
-        const status = new PerformaInvoiceStatus({ performaInvoiceId, status: req.body.status, date: Date.now() });
+        const status = new PerformaInvoiceStatus({ performaInvoiceId, status: req.body.status, date: Date.now(), remarks });
 
         let pi = await PerformaInvoice.findByPk(performaInvoiceId)
         pi.status = req.body.status;

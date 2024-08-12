@@ -49,11 +49,18 @@ export class ViewInvoicesComponent {
     this.getInvoices();
   }
 
-  invoices : PerformaInvoice[]=[];
+  invoices : any[]=[];
   invoiceSubscriptions! : Subscription;
   getInvoices(){
     this.submittingForm = true;
     this.invoiceSubscriptions = this.invoiceService.getPI(this.status).subscribe((res: any)=>{
+      console.log(res);
+      res.forEach((mainObj: any) => {
+        const matchingStatus = mainObj.performaInvoiceStatuses.find((statusObj: any) => statusObj.status === mainObj.status);
+        if (matchingStatus) {
+          mainObj.remarks = matchingStatus.remarks;
+        }
+      });
       console.log(res);
 
       this.submittingForm = false;
@@ -99,6 +106,9 @@ export class ViewInvoicesComponent {
       }else if(event.selectedIndex === 3) {
         this.status = 'BANK SLIP ADDED'
         this.getInvoices()
+      }else if(event.selectedIndex === 4) {
+        this.status = 'KAM REJECTED'
+        this.getInvoices()
       }
     }
   }
@@ -109,11 +119,14 @@ export class ViewInvoicesComponent {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if(result){
+      console.log(result);
+
+      if(result.value){
         this.submittingForm = true;
         let data = {
           status: status,
-          performaInvoiceId: id
+          performaInvoiceId: id,
+          remarks: result.remarks
         }
         this.invoiceService.updatePIStatus(data).subscribe(result => {
           this.getInvoices();

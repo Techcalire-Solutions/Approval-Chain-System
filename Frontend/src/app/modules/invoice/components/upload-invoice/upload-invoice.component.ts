@@ -4,7 +4,8 @@ import { Subscription } from 'rxjs';
 import { PerformaInvoice } from '../../models/performa-invoice';
 import { FormBuilder, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-upload-invoice',
@@ -12,8 +13,11 @@ import { Router } from '@angular/router';
   styleUrls: ['./upload-invoice.component.scss']
 })
 export class UploadInvoiceComponent implements OnInit, OnDestroy  {
+  url = environment.apiUrl;
 
-  constructor(private invoiceService: InvoiceService, private fb: FormBuilder, private snackBar: MatSnackBar, private router: Router){}
+  constructor(private invoiceService: InvoiceService, private fb: FormBuilder, private snackBar: MatSnackBar, private router: Router,
+    private route: ActivatedRoute
+  ){}
 
   ngOnDestroy(): void {
     this.invSub?.unsubscribe();
@@ -23,11 +27,17 @@ export class UploadInvoiceComponent implements OnInit, OnDestroy  {
 
   ngOnInit(): void {
     this.generateInvoiceNumber()
+    let id = this.route.snapshot.params['id'];
+    if(id){
+      this.patchdata(id);
+    }
   }
 
   piForm = this.fb.group({
     piNo: ['', Validators.required],
-    url: ['', Validators.required]
+    url: ['', Validators.required],
+    remarks: [''],
+    status: ['']
   });
 
   @ViewChild('form') form!: ElementRef<HTMLFormElement>;
@@ -45,27 +55,37 @@ export class UploadInvoiceComponent implements OnInit, OnDestroy  {
     });
   }
 
+
+
   uploadProgress: number | null = null;
   uploadComplete: boolean = false;
   file!: any;
   uploadSub!: Subscription;
+  imageUrl!: string;
   uploadFile(event: Event) {
     const input = event.target as HTMLInputElement;
     this.file = input.files?.[0];
-    this.uploadComplete = true;
 
     if (this.file) {
-      let fileName = this.file.name
-      if(fileName.length > 12){
-        let splitName = fileName.split('.');
+      this.uploadComplete = false; // Set to false to show the progress bar
+
+      let fileName = this.file.name;
+      if (fileName.length > 12) {
+        const splitName = fileName.split('.');
         fileName = splitName[0].substring(0, 12) + "... ." + splitName[1];
       }
 
-      this.uploadSub = this.invoiceService.uploadInvoice(this.file).subscribe(invoice => {
-        this.piForm.get('url')?.setValue(invoice.fileUrl)
-        this.uploadComplete = false;
-      })
-
+      this.uploadSub = this.invoiceService.uploadInvoice(this.file).subscribe({
+        next: (invoice) => {
+          this.imageUrl = this.url + invoice.fileUrl;
+          this.piForm.get('url')?.setValue(invoice.fileUrl);
+          this.uploadComplete = true; // Set to true when upload is complete
+        },
+        error: (error) => {
+          console.error('Upload failed:', error);
+          this.uploadComplete = true; // Set to true to remove the progress bar even on error
+        }
+      });
     }
   }
 
@@ -127,6 +147,29 @@ export class UploadInvoiceComponent implements OnInit, OnDestroy  {
     this.submit = this.invoiceService.addPI(this.piForm.getRawValue()).subscribe((invoice: any) =>{
       this.snackBar.open(`Performa Invoice ${invoice.piNo} Uploaded succesfully...`,"" ,{duration:3000})
       this.router.navigateByUrl('/home/invoice/view')
+    });
+  }
+
+  piSub!: Subscription;
+  editStatus: boolean = false;
+  fileName!: string;
+  patchdata(id: number){
+    this.editStatus = true;
+    this.piSub = this.invoiceService.getPIById(id).subscribe(inv => {
+      this.fileName = inv.url
+      let remarks = inv.performaInvoiceStatuses.find(s => s.status === inv.status)?.remarks;
+      this.piForm.patchValue({piNo: inv.piNo, status: inv.status, remarks: remarks})
+      this.imageUrl = this.url + inv.url;
+      console.log(this.imageUrl);
+
+    });
+  }
+
+  clearFileInput() {
+    this.invoiceService.deleteInvoice(this.fileName).subscribe(inv => {
+      console.log(inv);
+      this.imageUrl = '';
+      this.file = '';
     });
   }
 }

@@ -9,7 +9,8 @@ const routes: Routes = [
   {path: 'view', data: {breadcrumb: 'View'},
     children: [
       {path: '', component: ViewInvoicesComponent, data: {breadcrumb: 'View'}},
-      {path: 'open/:id', component: PerformInvoiceComponent, data: {breadcrumb: 'Open'}}
+      {path: 'open/:id', component: PerformInvoiceComponent, data: {breadcrumb: 'Open'}},
+      {path: 'update/:id', component: UploadInvoiceComponent, data: {breadcrumb: 'Update'}},
     ]
   },
 ];

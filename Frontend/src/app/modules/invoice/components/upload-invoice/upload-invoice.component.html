@@ -1,43 +1,61 @@
 <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>File Upload</title>
-  </head>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>File Upload</title>
+</head>
+<body>
+  <div class="wrapper">
+    <header>File Uploader</header>
 
-  <body>
+    <form [formGroup]="piForm">
+      <mat-form-field appearance="outline">
+        <mat-label>InvoiceNo</mat-label>
+        <input matInput placeholder="" formControlName="piNo">
+      </mat-form-field>
 
-    <div class="wrapper">
-      <header>File Uploader</header>
-      <form [formGroup]="piForm">
-        <mat-form-field appearance="outline">
-          <mat-label>Outline form field</mat-label>
-          <input matInput placeholder="Placeholder" formControlName="piNo">
-          <!-- <mat-icon matSuffix>sentiment_very_satisfied</mat-icon> -->
-        </mat-form-field>
-      </form>
-      <form action="#" #form class="form">
+      <mat-form-field appearance="outline" *ngIf="editStatus">
+        <mat-label>Status</mat-label>
+        <input matInput placeholder="" formControlName="status">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" *ngIf="editStatus">
+        <mat-label>Remarks</mat-label>
+        <input matInput placeholder="" formControlName="remarks">
+      </mat-form-field>
+    </form>
+    <mat-icon *ngIf="imageUrl" style="font-size: 25px;" (click)="clearFileInput()">delete</mat-icon>
+
+    <form #form class="form">
+      <ng-container *ngIf="imageUrl; else noImageTemplate">
+        <input type="file" class="file-input" hidden #fileInput>
+        <img [src]="imageUrl" alt="Image" title="Image" height="300" width="300" />
+      </ng-container>
+
+      <ng-template #noImageTemplate>
         <input type="file" class="file-input" hidden #fileInput>
         <span class="material-icons">cloud_upload</span>
         <p>Browse file to upload</p>
-      </form>
-      <section class="progress-area" #progressArea>
-        <li class="row" *ngIf="file">
-          <span class="material-icons">file_copy</span>
-          <div class="content">
-            <div class="details">
-              <span class="name" *ngIf="uploadComplete">{{file.name}} . Uploading</span>
-              <mat-progress-bar mode="indeterminate" *ngIf="uploadComplete"></mat-progress-bar>
-              <span *ngIf="!uploadComplete" class="name">{{file.name}} . Uploaded</span>
-              <!-- <span class=percent">${fileLoaded}%</span> -->
-            </div>
-          </div>
-        </li>
-      </section>
+      </ng-template>
+    </form>
 
-      <button  mat-raised-button type="button" class="btn btn-success" (click)="onSubmit()" [disabled]="!piForm.valid">
-        <span class="material-icons" style="font-size: 25px;">save</span>
-      </button>
-    </div>
-  </body>
+    <section class="progress-area" *ngIf="file">
+      <li class="row">
+        <span class="material-icons">file_copy</span>
+        <div class="content">
+          <div class="details">
+            <span class="name">{{ file.name }} - {{ uploadComplete ? 'Uploaded' : 'Uploading' }}</span>
+            <mat-progress-bar *ngIf="!uploadComplete" mode="indeterminate"></mat-progress-bar>
+          </div>
+        </div>
+      </li>
+    </section>
+
+
+
+    <button mat-raised-button type="button" class="btn btn-success" (click)="onSubmit()" [disabled]="!piForm.valid">
+      <span class="material-icons" style="font-size: 25px;">save</span>
+    </button>
+  </div>
+</body>
 </html>

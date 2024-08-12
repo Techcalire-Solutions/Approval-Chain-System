@@ -47,7 +47,8 @@ Code written by:
                               <th> InvoiceNo</th>
                               <th> Invoice</th>
                               <th> View </th>
-                              <th> Status</th>
+                              <th> Approve</th>
+                              <th> Reject</th>
                               <th> Manage</th>
                           </tr>
                       </thead>
@@ -71,6 +72,9 @@ Code written by:
                          <td>
                            <mat-slide-toggle (change)="onToggleChange(invoice.id, invoice.piNo, 'KAM VERIFIED')"></mat-slide-toggle>
                          </td>
+                         <td>
+                          <mat-slide-toggle (change)="onToggleChange(invoice.id, invoice.piNo, 'KAM REJECTED')"></mat-slide-toggle>
+                        </td>
                          <td>
                            <mat-icon class="icon" [routerLink]="['edit', invoice.id]">edit_note</mat-icon>
                            <mat-icon class="icon" (click)="deleteInvoice(invoice.id)">delete</mat-icon>
@@ -183,7 +187,6 @@ Code written by:
             </mat-step>
 
             <mat-step label="BANK SLIP" optional>
-
               <div style="overflow-x: auto;">
                 <section class="table__body" *ngIf="invoices">
                   <table>
@@ -227,6 +230,51 @@ Code written by:
                          <td>
                            <mat-icon class="icon" [routerLink]="['edit', invoice.id]">edit_note</mat-icon>
                            <mat-icon class="icon" (click)="deleteInvoice(invoice.id)">delete</mat-icon>
+                         </td>
+                       </tr>
+
+                      </tbody>
+                  </table>
+                </section>
+              </div>
+              <mat-paginator [length]="totalItems" [pageSize]="pageSize" [pageSizeOptions]="[10, 20, 30,40,50,100]"
+                [pageIndex]="currentPage - 1" aria-label="Select page" (page)="onPageChange($event)">
+              </mat-paginator>
+            </mat-step>
+
+            <mat-step label="REJECTED" optional>
+              <div style="overflow-x: auto;">
+                <section class="table__body" *ngIf="invoices">
+                  <table>
+                      <thead>
+                          <tr>
+                              <th> InvoiceNo</th>
+                              <th> Invoice</th>
+                              <th> View </th>
+                              <th> Remarks </th>
+                              <th> Update</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                       <tr *ngFor="let invoice of invoices let i = index">
+                         <td> {{invoice.piNo}} </td>
+                         <td>
+                           <ng-container *ngIf="invoice.url">
+                             <img [src]="url + invoice.url" alt="Invoice Image" alt="Description of image"
+                               style="width: 50px; height: 50px;"
+                               (mouseover)="enlargeImage(i, true)"
+                               (mouseout)="enlargeImage(i, false)"
+                               [ngClass]="{ 'enlarged': isImageEnlarged[i] }"
+                             />
+                           </ng-container>
+                           <img >
+                         </td>
+                         <td>
+                           <mat-icon class="icon" [routerLink]="['open', invoice.id]">preview</mat-icon>
+                         </td>
+                         <td> {{ invoice.remarks }} </td>
+                         <td>
+                           <mat-icon class="icon" [routerLink]="['update', invoice.id]">edit_note</mat-icon>
                          </td>
                        </tr>
 

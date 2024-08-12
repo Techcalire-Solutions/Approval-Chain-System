@@ -24,6 +24,10 @@ export class InvoiceService {
     }
   }
 
+  deleteInvoice(fileName: string){
+    return this._http.delete(this.url + '/invoice/filedelete' + fileName);
+  }
+
   getPI(status?: string): Observable<PerformaInvoice[]>{
     return this._http.get<PerformaInvoice[]>(this.url + `/performaInvoice/find/?status=${status}`);
   }

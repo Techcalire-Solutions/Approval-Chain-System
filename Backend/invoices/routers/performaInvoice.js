@@ -35,7 +35,11 @@ router.get('/find', authenticateToken, async(req, res) => {
     }
     try {
         const pi = await PerformaInvoice.findAll({
-            where: where
+            where: where,
+            order: ['id'],
+            include: [
+                {model: PerformaInvoiceStatus}
+            ]
         })
         res.send(pi)
     } catch (error) {
@@ -45,7 +49,7 @@ router.get('/find', authenticateToken, async(req, res) => {
 
 router.get('/findbyid/:id', authenticateToken, async(req, res) => {
     try {
-        const pi = await PerformaInvoice.findByPk(req.params.id)
+        const pi = await PerformaInvoice.findByPk(req.params.id, {include: [PerformaInvoiceStatus]})
         res.send(pi)
     } catch (error) {
         res.send(error.message)
