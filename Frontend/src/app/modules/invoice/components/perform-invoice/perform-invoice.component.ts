@@ -7,6 +7,7 @@ import { environment } from 'src/environments/environment';
 import { MatDialog } from '@angular/material/dialog';
 import { VerficationDialogeComponent } from '../verfication-dialoge/verfication-dialoge.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { AttachBankSlipComponent } from '../attach-bank-slip/attach-bank-slip.component';
 
 @Component({
   selector: 'app-perform-invoice',
@@ -31,11 +32,17 @@ export class PerformInvoiceComponent implements OnInit, OnDestroy {
   url!: string;
   piNo!: string;
   pi!: PerformaInvoice;
+  bankSlip!: string;
   getPiById(id: number){
     this.piSub = this.invoiceService.getPIById(id).subscribe(pi => {
+      console.log(pi);
+
       this.pi = pi;
       this.piNo = pi.piNo;
       this.url = environment.apiUrl + pi.url;
+      if(pi.bankSlip != null) this.bankSlip = environment.apiUrl + pi.bankSlip;
+      console.log(this.bankSlip);
+
     });
   }
 
@@ -46,7 +53,7 @@ export class PerformInvoiceComponent implements OnInit, OnDestroy {
 
     if(status === 'GENERATED') status = 'KAM VERIFIED';
     else if(status === 'KAM VERIFIED') status = 'AM VERIFIED';
-    // else if(status === 'AM VERIFIED') status = ''
+    else if(status === 'AM VERIFIED') return this.addBankSlip(this.pi.id, this.piNo)
 
     const dialogRef = this.dialog.open(VerficationDialogeComponent, {
       data: { invoiceNo: this.piNo, status: status }
@@ -70,4 +77,21 @@ export class PerformInvoiceComponent implements OnInit, OnDestroy {
     })
   }
 
+  addBankSlip(id: number, piNo: string){
+    console.log(id);
+
+    const dialogRef = this.dialog.open(AttachBankSlipComponent, {
+      data: { invoiceNo: piNo, id: id }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if(result){
+        this.getPiById(id)
+        this.snackBar.open(`BankSlip is attached with Invoice ${piNo} ...`,"" ,{duration:3000})
+        // this.invoiceService.updatePIStatusWithBankSlip(data).subscribe(result => {
+        //   console.log(result);
+        // });
+      }
+    })
+  }
 }

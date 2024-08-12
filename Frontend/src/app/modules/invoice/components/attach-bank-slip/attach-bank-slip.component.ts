@@ -71,7 +71,11 @@ export class AttachBankSlipComponent {
   submit!: Subscription;
   onSubmit() {
     this.submit = this.invoiceService.addBankSlip(this.piForm.getRawValue(), this.dialogData.id).subscribe((invoice: any) =>{
-      this.dialogRef.close();
+      this.dialogRef.close(true);
     });
+  }
+
+  onCancelClick(): void {
+    this.dialogRef.close();
   }
 }

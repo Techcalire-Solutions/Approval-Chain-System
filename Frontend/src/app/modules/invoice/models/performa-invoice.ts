@@ -3,4 +3,5 @@ export interface PerformaInvoice {
   piNo: string;
   url: string;
   status: string;
+  bankSlip: string;
 }

@@ -116,8 +116,7 @@ export class ViewInvoicesComponent {
           performaInvoiceId: id
         }
         this.invoiceService.updatePIStatus(data).subscribe(result => {
-          console.log(result);
-
+          this.getInvoices();
           this.submittingForm = false;
           this.snackBar.open(`Invoice ${invoiceNo} updated to ${status}...`,"" ,{duration:3000})
         });
