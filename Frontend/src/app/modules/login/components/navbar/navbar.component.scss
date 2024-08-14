@@ -45,6 +45,7 @@ body {
   font-family: var(--body-font);
   font-size: var(--normal-font-size);
   background-color: var(--body-color);
+  height: 100%;
 }
 
 ul {
@@ -122,6 +123,8 @@ a {
   position: relative;
   width: 32px;
   height: 32px;
+  color: white;
+  margin-top: 15px;
 }
 
 .nav__burger,
@@ -350,6 +353,7 @@ a {
   margin-top: 10px;
   list-style: none;
   padding: 0;
+  font-size: small;
   //margin: 0;
 
   .breadcrumb-item {
@@ -372,4 +376,54 @@ a {
       }
     }
   }
+}
+
+/* Style for the bottom-bar container */
+.bottom-bar {
+  background: linear-gradient(0deg,#203f7a, #b0c8c5);
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.25); /* Set your desired background color */
+  padding: 10px; /* Adjust the padding as needed */
+  text-align: center; /* Center-align the content */
+}
+
+/* Style for the line-1 image */
+.bottom-bar-child {
+  width: 50px; /* Set the width of the image as needed */
+  height: auto; /* Maintain aspect ratio */
+  margin-right: 10px; /* Adjust the margin as needed */
+}
+
+/* Style for the powered-by text */
+.powered-by {
+  font-size: 14px; /* Set the font size as needed */
+  color: #333; /* Set the text color */
+}
+
+// .bottom-bar {
+//   background-color: white;
+//   padding: 15px 0;
+// }
+
+// .bottom-bar .mat-tab-group {
+//   margin-bottom: 10px;
+// }
+
+.icon-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.icon-container a {
+  flex: 1; /* This allows each icon to take up equal space */
+  text-align: center; /* Centers the icon within its allocated space */
+}
+
+.selected {
+  background-color: rgb(9, 23, 70); /* or any other highlight style */
+  border-radius: 100%; /* Optional: Make the highlight rounded */
+  padding: 5px;
+}
+
+span{
+  color: white;
 }

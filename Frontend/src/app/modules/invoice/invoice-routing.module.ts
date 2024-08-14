@@ -7,12 +7,12 @@ import { ResponsiveTableComponent } from './components/responsive-table/responsi
 
 const routes: Routes = [
   {path: 'upload', component: UploadInvoiceComponent, data: {breadcrumb: 'Upload'}},
+  {path: 'open/:id', component: PerformInvoiceComponent, data: {breadcrumb: 'Open'}},
+  {path: 'update/:id', component: UploadInvoiceComponent, data: {breadcrumb: 'Update'}},
+  {path: 'responsive', component: ResponsiveTableComponent, data: {breadcrumb: 'Update'}},
   {path: 'view', data: {breadcrumb: 'View'},
     children: [
       {path: '', component: ResponsiveTableComponent, data: {breadcrumb: 'View'}},
-      {path: 'open/:id', component: PerformInvoiceComponent, data: {breadcrumb: 'Open'}},
-      {path: 'update/:id', component: UploadInvoiceComponent, data: {breadcrumb: 'Update'}},
-      {path: 'responsive', component: ResponsiveTableComponent, data: {breadcrumb: 'Update'}},
     ]
   },
 ];

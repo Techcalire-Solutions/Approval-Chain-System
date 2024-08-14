@@ -24,16 +24,16 @@ export class InvoiceService {
     }
   }
 
-  deleteInvoice(id: number){
-    return this._http.delete(this.url + `/invoice/filedelete/${id}`);
+  deleteInvoice(id: number, fileName: string){
+    return this._http.delete(this.url + `/invoice/filedelete/?id=${id}&fileName=${fileName}`);
   }
 
   getPI(status?: string): Observable<PerformaInvoice[]>{
     return this._http.get<PerformaInvoice[]>(this.url + `/performaInvoice/find/?status=${status}`);
   }
 
-  getPIBySP(status?: string): Observable<PerformaInvoice[]>{
-    return this._http.get<PerformaInvoice[]>(this.url + `/performaInvoice/findbysp/?status=${status}`);
+  getPIBySP(status?: string, search?: string, currentPage?: number, pageSize?: number): Observable<PerformaInvoice[]>{
+    return this._http.get<PerformaInvoice[]>(this.url + `/performaInvoice/findbysp/?status=${status}&search=${search}&page=${currentPage}&pageSize=${pageSize}`);
   }
 
   getPIByKAM(status?: string): Observable<PerformaInvoice[]>{

@@ -6,6 +6,7 @@ const path = require('path');
 const fs = require('fs');
 const PerformaInvoice = require('../models/performaInvoice');
 const authenticateToken = require('../../middleware/authorization');
+const PerformaInvoiceStatus = require('../models/invoiceStatus');
 
 router.post('/fileupload', multer.single('file'), authenticateToken, (req, res) => {
   try {
@@ -30,6 +31,53 @@ router.post('/fileupload', multer.single('file'), authenticateToken, (req, res) 
     res.status(500).send({ message: error.message });
   }
 });
+
+router.delete('/filedelete', authenticateToken, async (req, res) => {
+  try {
+    console.log(req.query);
+    const fileName = path.basename(req.query.fileName);
+
+    console.log(fileName);
+    const filePath = path.join(__dirname, '../uploads', fileName);
+
+    // Check if the file exists
+    if (fs.existsSync(filePath)) {
+      // Delete the file
+      fs.unlink(filePath, async (err) => {
+        if (err) {
+          console.error('Error deleting file:', err);
+          return res.status(500).send({ message: 'Error deleting file' });
+        }
+
+        // File deletion was successful, proceed with database operations
+        const pi = await PerformaInvoice.findByPk(req.query.id);
+        pi.url = '';
+        await pi.save();
+
+        const piStatusArray = await PerformaInvoiceStatus.findAll({
+          where: { id: req.query.id },
+        });
+
+        if (piStatusArray.length > 0) {
+          for (const piStatus of piStatusArray) {
+            await piStatus.destroy();
+          }
+          console.log('All records deleted.');
+        } else {
+          console.log('No records found.');
+        }
+
+        res.send(pi); // Send the response after the file is deleted and database operations are complete
+      });
+    } else {
+      return res.status(404).send({ message: 'File not found' });
+    }
+  } catch (error) {
+    console.error('Error:', error.message);
+    res.status(500).send(error.message);
+  }
+});
+
 
 const deleteFile = (filePath) => {
   return new Promise((resolve, reject) => {

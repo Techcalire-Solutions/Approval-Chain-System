@@ -50,7 +50,7 @@ export class UploadInvoiceComponent implements OnInit, OnDestroy  {
     url: ['', Validators.required],
     remarks: [''],
     status: [''],
-    kamId: [, Validators.required]
+    kamId: <any>[, Validators.required]
   });
 
   @ViewChild('form') form!: ElementRef<HTMLFormElement>;
@@ -58,17 +58,15 @@ export class UploadInvoiceComponent implements OnInit, OnDestroy  {
   @ViewChild('progressArea') progressArea!: ElementRef<HTMLElement>;
   @ViewChild('uploadArea') uploadArea!: ElementRef<HTMLElement>;
 
-  ngAfterViewInit() {
-    this.form.nativeElement.addEventListener('click', () => {
-      this.fileInput.nativeElement.click();
-    });
+  // ngAfterViewInit() {
+  //   this.form.nativeElement.addEventListener('click', () => {
+  //     this.fileInput.nativeElement.click();
+  //   });
 
-    this.fileInput.nativeElement.addEventListener('change', (e: Event) => {
-      this.uploadFile(e)
-    });
-  }
-
-
+  //   this.fileInput.nativeElement.addEventListener('change', (e: Event) => {
+  //     this.uploadFile(e)
+  //   });
+  // }
 
   uploadProgress: number | null = null;
   uploadComplete: boolean = false;
@@ -159,7 +157,14 @@ export class UploadInvoiceComponent implements OnInit, OnDestroy  {
   onSubmit(){
     this.submit = this.invoiceService.addPI(this.piForm.getRawValue()).subscribe((invoice: any) =>{
       this.snackBar.open(`Performa Invoice ${invoice.piNo} Uploaded succesfully...`,"" ,{duration:3000})
-      this.router.navigateByUrl('/home/invoice/view')
+      this.router.navigateByUrl('/home')
+    });
+  }
+
+  onUpdate(){
+    this.submit = this.invoiceService.addPI(this.piForm.getRawValue()).subscribe((invoice: any) =>{
+      this.snackBar.open(`Performa Invoice ${invoice.piNo} Uploaded succesfully...`,"" ,{duration:3000})
+      this.router.navigateByUrl('/home')
     });
   }
 
@@ -173,19 +178,17 @@ export class UploadInvoiceComponent implements OnInit, OnDestroy  {
       console.log(this.fileName);
 
       let remarks = inv.performaInvoiceStatuses.find(s => s.status === inv.status)?.remarks;
-      this.piForm.patchValue({piNo: inv.piNo, status: inv.status, remarks: remarks})
-      this.imageUrl = this.url + inv.url;
+      this.piForm.patchValue({piNo: inv.piNo, status: inv.status, remarks: remarks, kamId: inv.kamId})
+      if(inv.url != '') this.imageUrl = this.url + inv.url;
       console.log(this.imageUrl);
 
     });
   }
 
   clearFileInput() {
-    let data = {
-      file: this.fileName,
-      id: this.id
-    }
-    this.invoiceService.deleteInvoice(this.id).subscribe(inv => {
+    let file = this.fileName
+    let id = this.id
+    this.invoiceService.deleteInvoice(id, file).subscribe(inv => {
       console.log(inv);
       this.imageUrl = '';
       this.file = '';

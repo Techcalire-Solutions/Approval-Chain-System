@@ -11,12 +11,13 @@ const routes: Routes = [
   {path: '', component: LoginComponent},
   {path: 'home', component: NavbarComponent, data: {breadcrumb: 'Home'},
     children: [
+      {path: '', component: DashboardComponent},
       {path: 'user',  data: {breadcrumb: 'User'}, children: [
         {path: '', component: ViewUserComponent,},
         {path: 'add', component: AddUserComponent, data: {breadcrumb: 'Add'}},
-        {path: 'edit/:id', component: AddUserComponent, data: {breadcrumb: 'Edit'}}
+        {path: 'edit/:id', component: AddUserComponent, data: {breadcrumb: 'Edit'}},
+        {path: 'role',  data: {breadcrumb: 'Role'}, component: RoleManagementComponent},
       ]},
-      {path: 'role',  data: {breadcrumb: 'Role'}, component: RoleManagementComponent},
       {path:'invoice', loadChildren:()=>import('../invoice/invoice.module').then(x=>x.InvoiceModule), data: {breadcrumb: 'Invoice'}},
     ]
   },

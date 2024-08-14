@@ -4,6 +4,8 @@ const authenticateToken = require('../../middleware/authorization');
 const PerformaInvoice = require('../models/performaInvoice');
 const PerformaInvoiceStatus = require('../models/invoiceStatus');
 const User = require('../../users/models/user');
+const { Op, fn, col, where } = require('sequelize');
+const sequelize = require('../../utils/db');
 
 router.post('/save', authenticateToken, async(req, res) => {
     const { piNo, url, kamId} = req.body;
@@ -67,16 +69,38 @@ router.get('/findbyid/:id', authenticateToken, async(req, res) => {
 router.get('/findbysp', authenticateToken, async(req, res) => {
     let status = req.query.status;
     let user = req.user.id;
-    console.log(status, user, "______________________");
     
     let where = { salesPersonId: user };
-    if(status != '' && status != 'undefined'){
-        where = { status: status, salesPersonId: user}
+
+    if (status !== '' && status !== 'undefined' && status !== 'REJECTED') {
+        where.status = status;
+    } else if (status === 'REJECTED') {
+        where.status = { [Op.or]: ['KAM REJECTED', 'AM REJECTED'] };
     }
+    
+    if (req.query.search !== '' && req.query.search !== 'undefined') {
+        const searchTerm = req.query.search.replace(/\s+/g, '').trim().toLowerCase();
+        where[Op.or] = [
+            ...(where[Op.or] || []),
+            sequelize.where(
+                sequelize.fn('LOWER', sequelize.fn('REPLACE', sequelize.col('piNo'), ' ', '')),
+                {
+                    [Op.like]: `%${searchTerm}%`
+                }
+            )
+        ];
+    }  
+
+    let limit; 
+    let offset; 
+    if (req.query.pageSize && req.query.page ) {
+        limit = req.query.pageSize;
+        offset = (req.query.page - 1) * req.query.pageSize;
+      }
     try {
         const pi = await PerformaInvoice.findAll({
-            where: where,
-            order: ['id'],
+            where: where, limit, offset,
+            order: [['id', 'DESC']],
             include: [
                 {model: PerformaInvoiceStatus},
                 {model: User, as: 'salesPerson', attributes: ['name']},
@@ -84,9 +108,21 @@ router.get('/findbysp', authenticateToken, async(req, res) => {
 
             ]
         })
-        console.log(pi);
+
+        let totalCount;
+        totalCount = await PerformaInvoice.count({
+          where: where
+        });
         
-        res.send(pi)
+        if (req.query.page && req.query.pageSize != 'undefined') {
+            const response = {
+              count: totalCount,
+              items: pi,
+            };
+            res.json(response);
+          } else {
+            res.send(pi);
+          }
     } catch (error) {
         res.send(error.message)
     }
@@ -188,6 +224,30 @@ router.patch('/bankslip/:id', authenticateToken, async(req, res) => {
         })
         await piStatus.save();
         res.json({ p: pi, status: piStatus})
+    } catch (error) {
+        res.send(error.message)
+    }
+});
+
+router.patch('/update/:id', authenticateToken, async(req, res) => {
+    const { piNo, url, kamId} = req.body;
+    const userId = req.user.id;
+    try {
+        const pi = await PerformaInvoice.findByPk(req.params.id);
+        pi.url = url;
+        pi.kamId = kamId;
+        let count = pi.count + 1;
+        pi.count = count;
+
+        await pi.save();
+
+        const piId = newPi.id;
+        
+        const piStatus = new PerformaInvoiceStatus({
+            performaInvoiceId: piId, status: 'GENERATED', date: new Date()
+        })
+        await piStatus.save();
+        res.json({ p: newPi, status: piStatus})
     } catch (error) {
         res.send(error.message)
     }

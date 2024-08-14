@@ -1,17 +1,6 @@
 <!DOCTYPE html>
    <html lang="en">
-   <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-      <!--=============== REMIXICONS ===============-->
-      <link href="https://cdn.jsdelivr.net/npm/remixicon@3.2.0/fonts/remixicon.css" rel="stylesheet">
-
-      <!--=============== CSS ===============-->
-      <!-- <link rel="stylesheet" href="assets/css/styles.css"> -->
-
-      <title>Responsive dropdown menu - Bedimcode</title>
-   </head>
    <body>
     <mat-toolbar>
       <header class="header">
@@ -23,8 +12,8 @@
 
 
               <div class="nav__toggle" id="nav-toggle">
-                 <i class="ri-menu-line nav__burger"></i>
-                 <i class="ri-close-line nav__close"></i>
+                <span class="material-icons nav__burger">menu</span>
+                <span class="material-icons nav__close">close</span>
               </div>
            </div>
 
@@ -132,9 +121,9 @@
           <ol class="breadcrumb">
             <ng-template ngFor let-route [ngForOf]="parent.breadcrumbs" let-last="last">
               <li *ngIf="!route.terminal" class="breadcrumb-item">
-                <a href="" [routerLink]="[route.url]">{{route.displayName| uppercase}}</a><span *ngIf="!last"> > </span>
+                <a href="" [routerLink]="[route.url]">{{route.displayName}}</a><span *ngIf="!last"> > </span>
               </li>
-              <li *ngIf="route.terminal" class="breadcrumb-item active">{{route.displayName| uppercase}}</li>
+              <li *ngIf="route.terminal" class="breadcrumb-item active">{{route.displayName}}</li>
             </ng-template>
           </ol>
         </breadcrumb>
