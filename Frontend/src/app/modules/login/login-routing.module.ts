@@ -5,6 +5,7 @@ import { LoginComponent } from './components/login/login.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { AddUserComponent } from './components/add-user/add-user.component';
 import { ViewUserComponent } from './components/view-user/view-user.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
 
 const routes: Routes = [
   {path: '', component: LoginComponent},

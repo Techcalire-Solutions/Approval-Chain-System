@@ -1,3 +1,4 @@
+import { User } from "../../login/models/user";
 import { PerformaInvoiceStatus } from "./performa-invoice-status";
 
 export interface PerformaInvoice {
@@ -6,5 +7,13 @@ export interface PerformaInvoice {
   url: string;
   status: string;
   bankSlip: string;
-  performaInvoiceStatuses: PerformaInvoiceStatus[]
+  performaInvoiceStatuses: PerformaInvoiceStatus[];
+  salesPersonId : number;
+  kamId : number;
+  amId: number;
+  accountantId : number;
+  salesPerson: User;
+  kam: User;
+  am: User;
+  accountant: User;
 }

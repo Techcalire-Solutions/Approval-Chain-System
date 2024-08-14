@@ -4,9 +4,10 @@ const {Op, fn, col, where} = require('sequelize');
 const multer = require('../../utils/multer'); // Import the configured multer instance
 const path = require('path');
 const fs = require('fs');
+const PerformaInvoice = require('../models/performaInvoice');
+const authenticateToken = require('../../middleware/authorization');
 
-router.post('/fileupload', multer.single('file'), (req, res) => {
-  
+router.post('/fileupload', multer.single('file'), authenticateToken, (req, res) => {
   try {
     console.log(req.body);
     
@@ -41,20 +42,28 @@ const deleteFile = (filePath) => {
   });
 };
 
-router.delete('/filedelete/*', async (req, res) => {
+router.delete('/filedelete/:id', async (req, res) => {
+  let id = req.params.id;
   try {
-    // Extract the file path from the URL
-    const encodedFilePath = req.params[0];
-    console.log(encodedFilePath);
-     // Capture the rest of the URL after /filedelete/
-    const decodedFilePath = decodeURIComponent(encodedFilePath); // Decode the URL component
-    
-    // Resolve the absolute path
-    const absoluteFilePath = path.resolve(decodedFilePath);
+    const pi = await PerformaInvoice.findByPk(id);
+    let filename = pi.url
+    const directoryPath = path.join(__dirname, '../uploads'); // Replace 'uploads' with your folder name
+    const filePath = path.join(directoryPath, filename);
 
-    await deleteFile(absoluteFilePath);
+    fs.access(filePath, fs.constants.F_OK, (err) => {
+        if (err) {
+            return res.status(404).json({ message: 'File not found' });
+        }
 
-    res.status(200).send({ message: 'File deleted successfully' });
+        // Delete the file
+        fs.unlink(filePath, (err) => {
+            if (err) {
+                return res.status(500).json({ message: 'Error deleting file' });
+            }
+
+            return res.status(200).json({ message: 'File deleted successfully' });
+        });
+    })
   } catch (error) {
     console.error('Error deleting file:', error);
     res.status(500).send({ message: error.message });

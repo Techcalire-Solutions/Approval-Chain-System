@@ -13,23 +13,20 @@ import { Attendance } from '../../models/attendance';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent {
-  user: any;
+  isSignUpMode = false; // Controls the mode (sign-up/sign-in)
 
-  constructor(private fb:FormBuilder, private router:Router,private loginService: LoginService, private _snackBar: MatSnackBar) { }
+  constructor(
+    private fb: FormBuilder,
+    private router: Router,
+    private loginService: LoginService
+  ) {}
 
-  loginForm = this.fb.group({
-    email:['',Validators.required],
-    password: ['',Validators.required ]
-  })
+  // Toggles the sign-up mode
+  toggleSignUpMode(isSignUp: boolean = true): void {
+    this.isSignUpMode = isSignUp;
+  }
 
-
-  submit(){
-    // let {email,password}=this.loginForm.getRawValue()
-    // if(email=="nibinm@gmail.com"&&password=="123456"){
-    //   this.router.navigate(['/admin']);
-    //   return
-    // }
-    // alert("Email or password is in correct")
+  onSignIn(): void {
     console.log(this.loginForm.getRawValue())
     this.loginService.loginUser(this.loginForm.getRawValue()).subscribe((res)=>{
       // this.user =res
@@ -40,6 +37,29 @@ export class LoginComponent {
       // this.router.navigateByUrl('/admin')
 
     })
+  }
+
+  onSignUp(): void {
+    // Handle sign-up logic here
+  }
+
+
+  user: any;
+
+  loginForm = this.fb.group({
+    email: ['', [Validators.required, Validators.email]],
+    password: ['', [Validators.required]]
+  });
+
+
+  submit(){
+    // let {email,password}=this.loginForm.getRawValue()
+    // if(email=="nibinm@gmail.com"&&password=="123456"){
+    //   this.router.navigate(['/admin']);
+    //   return
+    // }
+    // alert("Email or password is in correct")
+
   }
 
   // setCurrentUser(){

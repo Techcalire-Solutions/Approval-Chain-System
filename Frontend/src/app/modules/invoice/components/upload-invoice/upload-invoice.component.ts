@@ -6,6 +6,8 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
+import { LoginService } from 'src/app/modules/login/login.service';
+import { User } from 'src/app/modules/login/models/user';
 
 @Component({
   selector: 'app-upload-invoice',
@@ -16,7 +18,7 @@ export class UploadInvoiceComponent implements OnInit, OnDestroy  {
   url = environment.apiUrl;
 
   constructor(private invoiceService: InvoiceService, private fb: FormBuilder, private snackBar: MatSnackBar, private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute, private loginServie: LoginService
   ){}
 
   ngOnDestroy(): void {
@@ -25,19 +27,30 @@ export class UploadInvoiceComponent implements OnInit, OnDestroy  {
     this.submit?.unsubscribe();
   }
 
+  id!: number;
   ngOnInit(): void {
     this.generateInvoiceNumber()
-    let id = this.route.snapshot.params['id'];
-    if(id){
-      this.patchdata(id);
+    this.id = this.route.snapshot.params['id'];
+    if(this.id){
+      this.patchdata(this.id);
     }
+    this.getKAM();
+  }
+
+  kamSub!: Subscription;
+  kam: User[] = [];
+  getKAM(){
+    this.kamSub = this.loginServie.getUserByRole(2).subscribe(user =>{
+      this.kam = user;
+    });
   }
 
   piForm = this.fb.group({
     piNo: ['', Validators.required],
     url: ['', Validators.required],
     remarks: [''],
-    status: ['']
+    status: [''],
+    kamId: [, Validators.required]
   });
 
   @ViewChild('form') form!: ElementRef<HTMLFormElement>;
@@ -157,6 +170,8 @@ export class UploadInvoiceComponent implements OnInit, OnDestroy  {
     this.editStatus = true;
     this.piSub = this.invoiceService.getPIById(id).subscribe(inv => {
       this.fileName = inv.url
+      console.log(this.fileName);
+
       let remarks = inv.performaInvoiceStatuses.find(s => s.status === inv.status)?.remarks;
       this.piForm.patchValue({piNo: inv.piNo, status: inv.status, remarks: remarks})
       this.imageUrl = this.url + inv.url;
@@ -166,7 +181,11 @@ export class UploadInvoiceComponent implements OnInit, OnDestroy  {
   }
 
   clearFileInput() {
-    this.invoiceService.deleteInvoice(this.fileName).subscribe(inv => {
+    let data = {
+      file: this.fileName,
+      id: this.id
+    }
+    this.invoiceService.deleteInvoice(this.id).subscribe(inv => {
       console.log(inv);
       this.imageUrl = '';
       this.file = '';

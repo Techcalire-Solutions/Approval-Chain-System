@@ -45,7 +45,8 @@ Code written by:
                       <thead>
                           <tr>
                               <th> InvoiceNo</th>
-                              <th> Invoice</th>
+                              <th> KAM </th>
+                              <!-- <th> Invoice</th> -->
                               <th> View </th>
                               <th> Approve</th>
                               <th> Reject</th>
@@ -55,7 +56,8 @@ Code written by:
                       <tbody>
                        <tr *ngFor="let invoice of invoices let i = index">
                          <td> {{invoice.piNo}} </td>
-                         <td>
+                         <td> {{invoice.kam?.name}} </td>
+                         <!-- <td>
                            <ng-container *ngIf="invoice.url">
                              <img [src]="url + invoice.url" alt="Invoice Image" alt="Description of image"
                                style="width: 50px; height: 50px;"
@@ -65,7 +67,7 @@ Code written by:
                              />
                            </ng-container>
                            <img >
-                         </td>
+                         </td> -->
                          <td>
                            <mat-icon class="icon" [routerLink]="['open', invoice.id]">preview</mat-icon>
                          </td>
@@ -97,7 +99,8 @@ Code written by:
                       <thead>
                           <tr>
                               <th> InvoiceNo</th>
-                              <th> Invoice</th>
+                              <!-- <th> Invoice</th> -->
+                               <th>AM</th>
                               <th> View </th>
                               <th> Status</th>
                               <th> Manage</th>
@@ -106,7 +109,8 @@ Code written by:
                       <tbody>
                        <tr *ngFor="let invoice of invoices let i = index">
                          <td> {{invoice.piNo}} </td>
-                         <td>
+                         <td> {{invoice.am?.name}} </td>
+                         <!-- <td>
                            <ng-container *ngIf="invoice.url">
                              <img [src]="url + invoice.url" alt="Invoice Image" alt="Description of image"
                                style="width: 50px; height: 50px;"
@@ -116,7 +120,7 @@ Code written by:
                              />
                            </ng-container>
                            <img >
-                         </td>
+                         </td> -->
                          <td>
                            <mat-icon class="icon" [routerLink]="['open', invoice.id]">preview</mat-icon>
                          </td>
@@ -249,7 +253,7 @@ Code written by:
                       <thead>
                           <tr>
                               <th> InvoiceNo</th>
-                              <th> Invoice</th>
+                              <!-- <th> Invoice</th> -->
                               <th> View </th>
                               <th> Remarks </th>
                               <th> Update</th>
@@ -258,7 +262,7 @@ Code written by:
                       <tbody>
                        <tr *ngFor="let invoice of invoices let i = index">
                          <td> {{invoice.piNo}} </td>
-                         <td>
+                         <!-- <td>
                            <ng-container *ngIf="invoice.url">
                              <img [src]="url + invoice.url" alt="Invoice Image" alt="Description of image"
                                style="width: 50px; height: 50px;"
@@ -268,7 +272,7 @@ Code written by:
                              />
                            </ng-container>
                            <img >
-                         </td>
+                         </td> -->
                          <td>
                            <mat-icon class="icon" [routerLink]="['open', invoice.id]">preview</mat-icon>
                          </td>
