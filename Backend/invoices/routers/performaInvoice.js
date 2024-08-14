@@ -105,6 +105,8 @@ router.get('/findbysp', authenticateToken, async(req, res) => {
                 {model: PerformaInvoiceStatus},
                 {model: User, as: 'salesPerson', attributes: ['name']},
                 {model: User, as: 'kam', attributes: ['name']},
+                {model: User, as: 'am', attributes: ['name']},
+                {model: User, as: 'accountant', attributes: ['name']},
 
             ]
         })
@@ -131,41 +133,39 @@ router.get('/findbysp', authenticateToken, async(req, res) => {
 router.get('/findbkam', authenticateToken, async(req, res) => {
     let status = req.query.status;
     let user = req.user.id;
+    console.log(req.query);
     
     let where = { kamId: user };
-    if(status != '' && status != 'undefined'){
-        where = { status: status, kamId: user}
-    }
-    try {
-        const pi = await PerformaInvoice.findAll({
-            where: where,
-            order: ['id'],
-            include: [
-                {model: PerformaInvoiceStatus},
-                {model: User, as: 'salesPerson', attributes: ['name']},
-                {model: User, as: 'kam', attributes: ['name']},
-                {model: User, as: 'am', attributes: ['name']},
-                // {model: User, as: 'accountant', attributes: ['name']},
-            ]
-        })
-        res.send(pi)
-    } catch (error) {
-        res.send(error.message)
-    }
-})
 
-router.get('/findbyam', authenticateToken, async(req, res) => {
-    let status = req.query.status;
-    let user = req.user.id;
-    
-    let where = { amId: user };
-    if(status != '' && status != 'undefined'){
-        where = { status: status, amId: user }
+    if (status !== '' && status !== 'undefined' && status !== 'REJECTED') {
+        where.status = status;
+    } else if (status === 'REJECTED') {
+        where.status = { [Op.or]: ['KAM REJECTED', 'AM REJECTED'] };
     }
+    
+    if (req.query.search !== '' && req.query.search !== 'undefined') {
+        const searchTerm = req.query.search.replace(/\s+/g, '').trim().toLowerCase();
+        where[Op.or] = [
+            ...(where[Op.or] || []),
+            sequelize.where(
+                sequelize.fn('LOWER', sequelize.fn('REPLACE', sequelize.col('piNo'), ' ', '')),
+                {
+                    [Op.like]: `%${searchTerm}%`
+                }
+            )
+        ];
+    }  
+
+    let limit; 
+    let offset; 
+    if (req.query.pageSize !== '' && req.query.page !== '' && req.query.pageSize !== 'undefined' && req.query.page !== 'undefined' ) {
+        limit = req.query.pageSize;
+        offset = (req.query.page - 1) * req.query.pageSize;
+      }
     try {
         const pi = await PerformaInvoice.findAll({
-            where: where,
-            order: ['id'],
+            where: where, limit, offset,
+            order: [['id', 'DESC']],
             include: [
                 {model: PerformaInvoiceStatus},
                 {model: User, as: 'salesPerson', attributes: ['name']},
@@ -177,7 +177,84 @@ router.get('/findbyam', authenticateToken, async(req, res) => {
         })
         console.log(pi);
         
-        res.send(pi)
+        let totalCount;
+        totalCount = await PerformaInvoice.count({
+          where: where
+        });
+        
+        if (req.query.page && req.query.pageSize != 'undefined') {
+            const response = {
+              count: totalCount,
+              items: pi,
+            };
+            res.json(response);
+          } else {
+            res.send(pi);
+          }
+    } catch (error) {
+        res.send(error.message)
+    }
+})
+
+router.get('/findbyam', authenticateToken, async(req, res) => {
+    let status = req.query.status;
+    let user = req.user.id;
+    
+    let where = { amId: user };
+
+    if (status !== '' && status !== 'undefined' && status !== 'REJECTED') {
+        where.status = status;
+    } else if (status === 'REJECTED') {
+        where.status = { [Op.or]: ['KAM REJECTED', 'AM REJECTED'] };
+    }
+    
+    if (req.query.search !== '' && req.query.search !== 'undefined') {
+        const searchTerm = req.query.search.replace(/\s+/g, '').trim().toLowerCase();
+        where[Op.or] = [
+            ...(where[Op.or] || []),
+            sequelize.where(
+                sequelize.fn('LOWER', sequelize.fn('REPLACE', sequelize.col('piNo'), ' ', '')),
+                {
+                    [Op.like]: `%${searchTerm}%`
+                }
+            )
+        ];
+    }  
+
+    let limit; 
+    let offset; 
+    if (req.query.pageSize && req.query.page ) {
+        limit = req.query.pageSize;
+        offset = (req.query.page - 1) * req.query.pageSize;
+      }
+    try {
+        const pi = await PerformaInvoice.findAll({
+            where: where, limit, offset,
+            order: [['id', 'DESC']],
+            include: [
+                {model: PerformaInvoiceStatus},
+                {model: User, as: 'salesPerson', attributes: ['name']},
+                {model: User, as: 'kam', attributes: ['name']},
+                {model: User, as: 'am', attributes: ['name']},
+                {model: User, as: 'accountant', attributes: ['name']},
+
+            ]
+        })
+
+        let totalCount;
+        totalCount = await PerformaInvoice.count({
+          where: where
+        });
+        
+        if (req.query.page && req.query.pageSize != 'undefined') {
+            const response = {
+              count: totalCount,
+              items: pi,
+            };
+            res.json(response);
+          } else {
+            res.send(pi);
+          }
     } catch (error) {
         res.send(error.message)
     }
@@ -188,13 +265,36 @@ router.get('/findbyma', authenticateToken, async(req, res) => {
     let user = req.user.id;
     
     let where = { accountantId: user };
-    if(status != '' && status != 'undefined'){
-        where = { status: status, accountantId: user}
+
+    if (status !== '' && status !== 'undefined' && status !== 'REJECTED') {
+        where.status = status;
+    } else if (status === 'REJECTED') {
+        where.status = { [Op.or]: ['KAM REJECTED', 'AM REJECTED'] };
     }
+    
+    if (req.query.search !== '' && req.query.search !== 'undefined') {
+        const searchTerm = req.query.search.replace(/\s+/g, '').trim().toLowerCase();
+        where[Op.or] = [
+            ...(where[Op.or] || []),
+            sequelize.where(
+                sequelize.fn('LOWER', sequelize.fn('REPLACE', sequelize.col('piNo'), ' ', '')),
+                {
+                    [Op.like]: `%${searchTerm}%`
+                }
+            )
+        ];
+    }  
+
+    let limit; 
+    let offset; 
+    if (req.query.pageSize && req.query.page ) {
+        limit = req.query.pageSize;
+        offset = (req.query.page - 1) * req.query.pageSize;
+      }
     try {
         const pi = await PerformaInvoice.findAll({
-            where: where,
-            order: ['id'],
+            where: where, limit, offset,
+            order: [['id', 'DESC']],
             include: [
                 {model: PerformaInvoiceStatus},
                 {model: User, as: 'salesPerson', attributes: ['name']},
@@ -204,7 +304,21 @@ router.get('/findbyma', authenticateToken, async(req, res) => {
 
             ]
         })
-        res.send(pi)
+
+        let totalCount;
+        totalCount = await PerformaInvoice.count({
+          where: where
+        });
+        
+        if (req.query.page && req.query.pageSize != 'undefined') {
+            const response = {
+              count: totalCount,
+              items: pi,
+            };
+            res.json(response);
+          } else {
+            res.send(pi);
+          }
     } catch (error) {
         res.send(error.message)
     }

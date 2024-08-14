@@ -36,16 +36,16 @@ export class InvoiceService {
     return this._http.get<PerformaInvoice[]>(this.url + `/performaInvoice/findbysp/?status=${status}&search=${search}&page=${currentPage}&pageSize=${pageSize}`);
   }
 
-  getPIByKAM(status?: string): Observable<PerformaInvoice[]>{
-    return this._http.get<PerformaInvoice[]>(this.url + `/performaInvoice/findbkam/?status=${status}`);
+  getPIByKAM(status?: string, search?: string, currentPage?: number, pageSize?: number): Observable<PerformaInvoice[]>{
+    return this._http.get<PerformaInvoice[]>(this.url + `/performaInvoice/findbkam/?status=${status}&search=${search}&page=${currentPage}&pageSize=${pageSize}`);
   }
 
-  getPIByAM(status?: string): Observable<PerformaInvoice[]>{
-    return this._http.get<PerformaInvoice[]>(this.url + `/performaInvoice/findbyam/?status=${status}`);
+  getPIByAM(status?: string, search?: string, currentPage?: number, pageSize?: number): Observable<PerformaInvoice[]>{
+    return this._http.get<PerformaInvoice[]>(this.url + `/performaInvoice/findbyam/?status=${status}&search=${search}&page=${currentPage}&pageSize=${pageSize}`);
   }
 
-  getPIByMA(status?: string): Observable<PerformaInvoice[]>{
-    return this._http.get<PerformaInvoice[]>(this.url + `/performaInvoice/findbyma/?status=${status}`);
+  getPIByMA(status?: string, search?: string, currentPage?: number, pageSize?: number): Observable<PerformaInvoice[]>{
+    return this._http.get<PerformaInvoice[]>(this.url + `/performaInvoice/findbyma/?status=${status}&search=${search}&page=${currentPage}&pageSize=${pageSize}`);
   }
 
   addPI(data: any){

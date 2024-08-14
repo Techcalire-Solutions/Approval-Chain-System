@@ -119,11 +119,11 @@ export class DashboardComponent implements AfterViewInit {
     if (this.roleName === 'Initiator Sales Person') {
       apiCall = this.invoiceService.getPIBySP(this.status, this.filterValue, this.currentPage, this.pageSize);
     } else if (this.roleName === 'Key Account Manager') {
-      apiCall = this.invoiceService.getPIByKAM(this.status);
+      apiCall = this.invoiceService.getPIByKAM(this.status, this.filterValue, this.currentPage, this.pageSize);
     } else if (this.roleName === 'Authorizer Manager') {
-      apiCall = this.invoiceService.getPIByAM(this.status);
+      apiCall = this.invoiceService.getPIByAM(this.status, this.filterValue, this.currentPage, this.pageSize);
     } else if (this.roleName === 'Maker Accountant') {
-      apiCall = this.invoiceService.getPIByMA(this.status);
+      apiCall = this.invoiceService.getPIByMA(this.status, this.filterValue, this.currentPage, this.pageSize);
     }
 
     if (apiCall) {
@@ -174,6 +174,7 @@ export class DashboardComponent implements AfterViewInit {
     this.getInvoices();
   }
 
+  pageStatus: boolean = true;
   onStepSelectionChange(status: string) {
     console.log(status);
     if(this.roleName === 'Initiator Sales Person'){
@@ -190,34 +191,43 @@ export class DashboardComponent implements AfterViewInit {
       }
     }else if(this.roleName === 'Key Account Manager') {
       if(status === 'pending'){
+        this.pageStatus = true;
         this.status = 'GENERATED'
         this.getInvoices()
       }else if(status === 'assigned'){
+        this.pageStatus = false;
         this.status = ''
         this.getInvoices()
       }else if(status === 'completed'){
+        this.pageStatus = false;
         this.status = 'BANK SLIP ISSUED';
         this.getInvoices()
       }else if(status === 'all'){
+        this.pageStatus = false;
 
       }
 
     }else if(this.roleName === 'Authorizer Manager') {
       if(status === 'pending'){
+        this.pageStatus = true;
         this.status = 'KAM VERIFIED';
         this.getInvoices()
       }else if(status === 'assigned'){
+        this.pageStatus = false;
         this.status = ''
         this.getInvoices()
       }else if(status === 'completed'){
+        this.pageStatus = false;
         this.status = "BANK SLIP ISSUED"
         this.getInvoices()
       }else if(status === 'all'){
+        this.pageStatus = false;
 
       }
 
     }else if(this.roleName === 'Maker Accountant') {
       if(status === 'pending'){
+        this.pageStatus = true;
         this.status = 'AM VERIFIED'
         this.getInvoices()
       }else if(status === 'assigned'){
@@ -234,8 +244,9 @@ export class DashboardComponent implements AfterViewInit {
   }
 
   // submittingForm: boolean = false;
-  verified(value: string, piNo: string, sp: string){
+  verified(value: string, piNo: string, sp: string, id: number){
     this.submittingForm = true;
+    console.log(this.status);
 
     if(this.status === 'GENERATED' && value === 'approved') this.status = 'KAM VERIFIED';
     else if(this.status === 'GENERATED' && value === 'rejected') this.status = 'KAM REJECTED';
@@ -251,8 +262,8 @@ export class DashboardComponent implements AfterViewInit {
       if(result){
         this.submittingForm = true;
         let data = {
-          status: status,
-          // performaInvoiceId: this.pi.id,
+          status: this.status,
+          performaInvoiceId: id,
           remarks: result.remarks,
           amId: result.amId,
           accountantId: result.accountantId
@@ -263,8 +274,8 @@ export class DashboardComponent implements AfterViewInit {
           console.log(result);
 
           this.submittingForm = false;
-          this.router.navigateByUrl('/home/invoice/view')
-          // this.snackBar.open(`Invoice ${this.piNo} updated to ${status}...`,"" ,{duration:3000})
+          this.router.navigateByUrl('/home')
+          this.snackBar.open(`Invoice ${piNo} updated to ${this.status}...`,"" ,{duration:3000})
         });
       }
     })

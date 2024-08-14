@@ -6,11 +6,12 @@ const PerformaInvoiceStatus = require('../models/invoiceStatus');
 const PerformaInvoice = require('../models/performaInvoice');
 
 router.post('/updatestatus', authenticateToken, async (req, res) => {
-    const { performaInvoiceId, status, remarks, amId, accountantId} = req.body;
-    console.log(accountantId);
+    const { performaInvoiceId,  remarks, amId, accountantId} = req.body;
+    console.log(req.body);
     
     try {
         const status = new PerformaInvoiceStatus({ performaInvoiceId, status: req.body.status, date: Date.now(), remarks });
+        await status.save();
 
         let pi = await PerformaInvoice.findByPk(performaInvoiceId)
         pi.status = req.body.status;
@@ -18,9 +19,8 @@ router.post('/updatestatus', authenticateToken, async (req, res) => {
         if (accountantId != null) pi.accountantId = accountantId
         await pi.save();
 
-        await status.save();
-
-        res.send(status);
+    
+        res.json({pi, status});
     } catch (error) {
         res.send(error.message)
     }

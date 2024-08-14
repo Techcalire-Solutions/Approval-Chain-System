@@ -44,8 +44,8 @@
                   <div class="action-icons">
                     <mat-icon class="icon" [routerLink]="['invoice/update', invoice.id]" *ngIf="sp">edit_note</mat-icon>
                     <mat-icon class="icon" [routerLink]="['invoice/update', invoice.id]" *ngIf="sp">delete</mat-icon>
-                    <mat-icon class="icon" (click)="verified('approved', invoice.piNo, invoice.salesPerson.name)" *ngIf="!sp">task_alt</mat-icon>
-                    <mat-icon class="icon" (click)="verified('rejected', invoice.piNo, invoice.salesPerson.name)" *ngIf="!sp">highlight_off</mat-icon>
+                    <mat-icon class="icon" (click)="verified('approved', invoice.piNo, invoice.salesPerson.name, invoice.id)" *ngIf="!sp && pageStatus">task_alt</mat-icon>
+                    <mat-icon class="icon" (click)="verified('rejected', invoice.piNo, invoice.salesPerson.name, invoice.id)" *ngIf="!sp && pageStatus">highlight_off</mat-icon>
                   </div>
                 </td>
               </tr>
