@@ -42,8 +42,18 @@
     </div>
   </div>
 
-  <mat-card-actions *ngIf="pi.status != 'BANK SLIP ADDED'">
-    <button mat-raised-button type="button" class="btn btn-success" (click)="verified()">
+  <mat-card-actions *ngIf="pi.status != 'BANK SLIP ISSUED' && !sp && !ma">
+    <button mat-raised-button type="button" class="btn btn-success" (click)="verified('approved')">
+      <span class="material-icons" style="font-size: 25px;">task_alt</span>
+    </button>
+
+    <button mat-raised-button type="button" class="btn btn-success" (click)="verified('rejected')" style="margin-left: 5px;">
+      <span class="material-icons" style="font-size: 25px;">highlight_off</span>
+    </button>
+  </mat-card-actions>
+
+  <mat-card-actions *ngIf="ma" >
+    <button mat-raised-button type="button" class="btn btn-success" (click)="addBankSlip(piNo)">
       <span class="material-icons" style="font-size: 25px;">task_alt</span>
     </button>
   </mat-card-actions>

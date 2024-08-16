@@ -1,182 +1,110 @@
-<!DOCTYPE html>
-
-<html lang="en" dir="ltr">
-  <head>
-    <meta charset="UTF-8">
-    <title> Wright Aero Components </title>
-
-    <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
-     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   </head>
-<body>
-
-<section class="home-section">
-
-    <div class="home-content">
-      <div class="overview-boxes">
-        <div class="box">
-          <div class="right-side">
-            <a href="/admin/viewRfqs" style="text-decoration: none; color: inherit;">
-              <div class="box-topic" style="color: blue">Pending RFQ</div>
-            </a>
-            <div class="number">{{ pendingRfqs }}</div>
-            <!-- <div class="indicator"> -->
-              <!-- <i class='bx bx-up-arrow-alt'></i> -->
-             <!-- <span class="text">Up from yesterday</span> -->
-            <!-- </div> -->
+<div class="page-container" fxLayout="column" fxLayoutAlign="space-between stretch">
+  <div fxLayout="column" fxLayoutAlign="space-between stretch" class="components-container">
+    <mat-card fxFlex>
+      <div fxFlex class="table-component-holder mat-elevation-z4">
+        <mat-toolbar class="table-header">
+          <div class="row" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+            <div class="col">
+              <h1>INVOICES</h1>
+            </div>
+            <div class="col" style="text-align: right;">
+              <div class="input-group">
+                <input type="search" placeholder="Search Data..." (keyup)="applyFilter($event)">
+              </div>
+            </div>
           </div>
-          <i class='bx bx-cart-alt cart'></i>
-        </div>
-        <div class="box">
-          <div class="right-side">
-            <div class="box-topic" style="color: blue">Total Sales</div>
-            <div class="number">{{ saleCount }}</div>
-            <!-- <div class="indicator">
-             <i class='bx bx-up-arrow-alt'></i> -->
-           <!-- <span class="text">Up from yesterday</span> -->
-            <!-- </div> -->
-          </div>
-          <i class='bx bxs-cart-add cart two'></i>
-        </div>
-        <div class="box">
-          <div class="right-side">
-            <div class="box-topic" style="color: blue">Total Quots</div>
-            <div class="number">{{ quotCount }}</div>
-            <!-- <div class="indicator"> -->
-             <!-- <i class='bx bx-up-arrow-alt'></i> -->
-           <!-- <span class="text">Up from yesterday</span> -->
-            <!-- </div> -->
-          </div>
-          <i class='bx bx-cart cart three'></i>
-        </div>
-        <div class="box">
-          <div class="right-side">
-            <div class="box-topic" style="color: blue">Total Stocks</div>
-            <div class="number">{{stockCount}}</div>
-            <!-- <div class="indicator">
-              <i class='bx bx-down-arrow-alt down'></i>
-               <span class="text">Down From Today</span>
-            </div> -->
-          </div>
-          <i class='bx bxs-cart-download cart four'></i>
+        </mat-toolbar>
+
+        <div class="table-container">
+          <table matSort (matSortChange)="sortData($event)">
+            <thead>
+              <tr>
+                <th mat-sort-header="invoiceNo" scope="col">InvoiceNo</th>
+                <th mat-sort-header="sp" scope="col">SP</th>
+                <th mat-sort-header="kam" scope="col">KAM</th>
+                <th mat-sort-header="am" scope="col">AM</th>
+                <th mat-sort-header="ma" scope="col">MA</th>
+                <th mat-sort-header="status" scope="col">Status</th>
+                <th mat-sort-header="view" scope="col">View</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let invoice of invoices let i = index"
+                [routerLink]="['invoice/open/', invoice.id]"
+                (mousedown)="onMouseDown($event, invoice)"
+                (mouseup)="onMouseUp($event)"
+                (mouseleave)="onMouseLeave($event)">
+                <td [attr.data-label]="'InvoiceNo'">{{invoice.piNo}}</td>
+                <td [attr.data-label]="'SP'">{{invoice.salesPerson?.name}}</td>
+                <td [attr.data-label]="'KAM'">{{invoice.kam?.name}}</td>
+                <td [attr.data-label]="'AM'">{{invoice.am?.name}}</td>
+                <td [attr.data-label]="'MA'">{{invoice.accountant?.name}}</td>
+                <td [attr.data-label]="'Status'">{{invoice.status}}</td>
+                <td (click)="$event.stopPropagation()">
+                  <div class="action-icons">
+                    <mat-icon class="icon" [routerLink]="['invoice/update', invoice.id]" *ngIf="sp">edit_note</mat-icon>
+                    <mat-icon class="icon" [routerLink]="['invoice/update', invoice.id]" *ngIf="sp">delete</mat-icon>
+                    <mat-icon class="icon" (click)="verified('approved', invoice.piNo, invoice.salesPerson.name, invoice.id)" *ngIf="!sp && pageStatus">task_alt</mat-icon>
+                    <mat-icon class="icon" (click)="verified('rejected', invoice.piNo, invoice.salesPerson.name, invoice.id)" *ngIf="!sp && pageStatus">highlight_off</mat-icon>
+                  </div>
+                </td>
+              </tr>
+              <tr *ngIf="invoices.length === 0">
+                <td [colSpan]="7" style="text-align: center;">No records found</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <mat-paginator [length]="totalItems" [pageSize]="pageSize" [pageIndex]="currentPage - 1"
+          (page)="onPageChange($event)" [pageSizeOptions]="[10, 20,30,40,50,100]">
+          </mat-paginator>
         </div>
       </div>
-<div class="sales-boxes" style="width:100%">
+    </mat-card>
+  </div>
 
-
-      <div class="recent-sales box">
-        <div class="title sales-details">Recent Leads
-
-
-          <!-- <input matInput style="text-align: right !important; padding-right: 10px;" (keyup)="applyFilter($event)" placeholder="Eg: Part Number" #input class="search-input"> -->
-
-          <button>
-            <!-- <a (click)="navigateToViewSales()">See All</a> -->
-        </button></div>
-      <div style="overflow-x: auto;">
-        <!-- <table style="width:100%" class="styled-table">
-          <thead>
-              <tr>   <th>Date</th>
-                  <th>Lead Number</th>
-                  <th>Company Name</th>
-                  <th>Priority</th>
-
-                  <th>Requested Date</th>
-                  <th>Status</th>
-
-              </tr>
-          </thead>
-          <tbody>
-              <tr *ngFor="let element of rfqbyMembers let i=index">
-                <td>{{ element.createdAt | date: 'dd/MMM/yyyy  HH.mm' }}</td>
-                  <td><a class="hyperlink" [routerLink]="['/home/rfqs/view/open/', element.id]">{{ element.rfqNumber }}</a></td>
-                  <td>
-                    <a class="hyperlink" [routerLink]="['/home/companies/view/open/', element.companyId]">{{ element.company.companyName }}</a>
-                  </td>
-                  <td>{{ element.priority.priorityName}}</td>
-
-              <td>{{ element.requestedDate| date:'dd/MM/yyyy' }}</td>
-                  <td>{{ element.rfqStatus}}</td>
-
-
-              </tr>
-          </tbody>
-        </table> -->
-      </div>
-      <!-- <mat-paginator [length]="totalItems" [pageSize]="pageSize" [pageSizeOptions]="[10, 20, 30,40,50,100]"
-        [pageIndex]="currentPage - 1" aria-label="Select page" (page)="onPageChange($event)">
-      </mat-paginator> -->
-
-</div>
-</div>
-
-
-      <!-- <div class="sales-boxes">
-        <div class="recent-sales box">
-          <div class="title sales-details">Recent RFQ's
-
-
-            <input matInput style="text-align: right !important; padding-right: 10px;" (keyup)="applyFilter($event)" placeholder="Eg: Part Number" #input class="search-input">
-
-            <button>
-              <a (click)="navigateToViewSales()">See All</a>
-          </button></div>
-          <div class="sales-details">
-            <table class="sales-table" style="width: 100%;">
-              <thead>
-                <tr class="topic">
-                  <th>Date</th>
-                  <th>RFQ #</th>
-                  <th>Company</th>
-                  <th>Status</th>
-                  <th>Stage</th>
-                  <th>Prepared by</th>
-
-                </tr>
-              </thead>
-              <br>
-              <tbody>
-                <tr *ngFor="let item of rfqbyMembers">
-                  <td>{{ item.createdAt | date: 'dd/MMM/yyyy  HH.mm' }}</td>
-                  <td>{{ item.rfqNumber }}</td>
-                  <td>{{ item.company.companyName}}</td>
-                  <td>{{ item.rfqStatus }}</td>
-                  <td>{{item.projectStage.name}}</td>
-                  <td>{{item.preparedBy.name}}</td>
-
-                </tr>
-              </tbody>
-
-                <mat-paginator style="text-align: right !important;" [length]="totalItems" [pageSize]="pageSize" [pageSizeOptions]="[10, 20, 30, 40, 50, 100]"
-                               [pageIndex]="currentPage - 1" aria-label="Select page" (page)="onPageChange($event)">
-                </mat-paginator>
-
-
-
-            </table>
-
-
-          </div>
-        </div>
-
-      </div> -->
+  <mat-divider></mat-divider>
+  <div class="bottom-bar">
+    <div class="container pt-4">
+      <section class="icon-container mb-4">
+        <a (click)="onTabClick('upload')" *ngIf="roleName ==='Initiator Sales Person'" routerLink="invoice/upload">
+          <span class="material-symbols-outlined"
+            [ngClass]="{'selected': selectedTab === 'upload'}">upload_file
+          </span>
+        </a>
+        <a (click)="onTabClick('bookmark')">
+          <span (click)="onStepSelectionChange('pending')" class="material-symbols-outlined"
+            [ngClass]="{'selected': selectedTab === 'bookmark'}"> for_you
+          </span>
+        </a>
+        <a (click)="onTabClick('factCheck')">
+          <span (click)="onStepSelectionChange('assigned')" class="material-symbols-outlined"
+            [ngClass]="{'selected': selectedTab === 'factCheck'}"> assignment_ind
+          </span>
+        </a>
+        <a (click)="onTabClick('list')">
+          <span (click)="onStepSelectionChange('completed')" class="material-symbols-outlined"
+            [ngClass]="{'selected': selectedTab === 'list'}"> assignment_turned_in
+          </span>
+        </a>
+        <a (click)="onTabClick('invoice')">
+          <span (click)="onStepSelectionChange('all')" class="material-symbols-outlined"
+            [ngClass]="{'selected': selectedTab === 'invoice'}"> receipt
+          </span>
+        </a>
+      </section>
     </div>
 
-
-  </section>
-
-  <script>
-   let sidebar = document.querySelector(".sidebar");
-let sidebarBtn = document.querySelector(".sidebarBtn");
-sidebarBtn.onclick = function() {
-  sidebar.classList.toggle("active");
-  if(sidebar.classList.contains("active")){
-  sidebarBtn.classList.replace("bx-menu" ,"bx-menu-alt-right");
-}else
-  sidebarBtn.classList.replace("bx-menu-alt-right", "bx-menu");
-}
- </script>
-
-
-</body>
-</html>
+    <!-- <div class="powered-by">Powered by : Tech Claire</div> -->
+  </div>
+    <!-- <footer class="text-center text-white" style="background-color: #f1f1f1;">
+      <div class="container pt-4">
+        <section class="icon-container mb-4">
+          <a *ngIf="roleName !=='Initiator Sales Person'"><span class="material-icons" (click)="onStepSelectionChange('pending')" style="color: green;">pending_actions</span></a>
+          <a (click)="onStepSelectionChange('assigned')"><span class="material-icons" style="color: darkgoldenrod;">bookmark_added</span></a>
+          <a (click)="onStepSelectionChange('completed')"><span class="material-icons" style="color: red;">fact_check</span></a>
+          <a (click)="onStepSelectionChange('all')"><span class="material-icons" style="color: darkslategray;">list_alt</span></a>
+        </section>
+      </div>
+    </footer> -->
+</div>

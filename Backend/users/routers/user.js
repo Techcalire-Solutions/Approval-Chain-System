@@ -211,5 +211,16 @@ router.delete('/delete/:id', authenticateToken, async(req, res)=>{
         res.send(error.message)
     }
 })
+
+router.get('/findbyrole/:id', async (req, res) => {
+  try {
+    const user = await User.findAll({
+      where: {roleId: req.params.id}
+    })
+    res.send(user);
+  } catch (error) {
+    res.send(error.message)
+  }
+})
 module.exports = router;
  

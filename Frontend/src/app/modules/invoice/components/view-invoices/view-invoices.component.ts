@@ -90,7 +90,7 @@ export class ViewInvoicesComponent {
     })
   }
 
-  status: string = 'GENERATED';
+  status: string = '';
   onStepSelectionChange(event: any) {
     this.currentPage = 1;
     if (event.previouslySelectedStep) {
@@ -104,7 +104,7 @@ export class ViewInvoicesComponent {
         this.status = 'AM VERIFIED'
         this.getInvoices()
       }else if(event.selectedIndex === 3) {
-        this.status = 'BANK SLIP ADDED'
+        this.status = 'BANK SLIP ISSUED'
         this.getInvoices()
       }else if(event.selectedIndex === 4) {
         this.status = 'KAM REJECTED'
@@ -121,12 +121,13 @@ export class ViewInvoicesComponent {
     dialogRef.afterClosed().subscribe(result => {
       console.log(result);
 
-      if(result.value){
+      if(result && result.value){
         this.submittingForm = true;
         let data = {
           status: status,
           performaInvoiceId: id,
-          remarks: result.remarks
+          remarks: result.remarks,
+          amId: result.amId
         }
         this.invoiceService.updatePIStatus(data).subscribe(result => {
           this.getInvoices();

@@ -24,12 +24,28 @@ export class InvoiceService {
     }
   }
 
-  deleteInvoice(fileName: string){
-    return this._http.delete(this.url + '/invoice/filedelete' + fileName);
+  deleteInvoice(id: number, fileName: string){
+    return this._http.delete(this.url + `/invoice/filedelete/?id=${id}&fileName=${fileName}`);
   }
 
   getPI(status?: string): Observable<PerformaInvoice[]>{
     return this._http.get<PerformaInvoice[]>(this.url + `/performaInvoice/find/?status=${status}`);
+  }
+
+  getPIBySP(status?: string, search?: string, currentPage?: number, pageSize?: number): Observable<PerformaInvoice[]>{
+    return this._http.get<PerformaInvoice[]>(this.url + `/performaInvoice/findbysp/?status=${status}&search=${search}&page=${currentPage}&pageSize=${pageSize}`);
+  }
+
+  getPIByKAM(status?: string, search?: string, currentPage?: number, pageSize?: number): Observable<PerformaInvoice[]>{
+    return this._http.get<PerformaInvoice[]>(this.url + `/performaInvoice/findbkam/?status=${status}&search=${search}&page=${currentPage}&pageSize=${pageSize}`);
+  }
+
+  getPIByAM(status?: string, search?: string, currentPage?: number, pageSize?: number): Observable<PerformaInvoice[]>{
+    return this._http.get<PerformaInvoice[]>(this.url + `/performaInvoice/findbyam/?status=${status}&search=${search}&page=${currentPage}&pageSize=${pageSize}`);
+  }
+
+  getPIByMA(status?: string, search?: string, currentPage?: number, pageSize?: number): Observable<PerformaInvoice[]>{
+    return this._http.get<PerformaInvoice[]>(this.url + `/performaInvoice/findbyma/?status=${status}&search=${search}&page=${currentPage}&pageSize=${pageSize}`);
   }
 
   addPI(data: any){

@@ -8,6 +8,7 @@ import { ViewInvoicesComponent } from './components/view-invoices/view-invoices.
 import { PerformInvoiceComponent } from './components/perform-invoice/perform-invoice.component';
 import { VerficationDialogeComponent } from './components/verfication-dialoge/verfication-dialoge.component';
 import { AttachBankSlipComponent } from './components/attach-bank-slip/attach-bank-slip.component';
+import { ResponsiveTableComponent } from './components/responsive-table/responsive-table.component';
 
 
 @NgModule({
@@ -16,7 +17,8 @@ import { AttachBankSlipComponent } from './components/attach-bank-slip/attach-ba
     ViewInvoicesComponent,
     PerformInvoiceComponent,
     VerficationDialogeComponent,
-    AttachBankSlipComponent
+    AttachBankSlipComponent,
+    ResponsiveTableComponent
   ],
   imports: [
     CommonModule,

@@ -1,4 +1,5 @@
 const Role = require("../users/models/role");
+const User = require("../users/models/user");
 const sequelize = require('./db');
 
 async function syncModel() {
@@ -14,6 +15,21 @@ async function syncModel() {
     if(role.length === 0){
         for(let i = 0; i < roleData.length; i++){
             Role.bulkCreate([roleData[i]]);
+        }
+    }
+
+    const userData = [
+        { name: "Admin", email: "admin@gmail.com", phoneNumber:"1234567890", password: "password", roleId: 1, status: true },
+    ];
+    const user = await User.findAll({});
+    if(user.length === 0){
+        for(let i = 0; i < userData.length; i++){
+            const hashedPassword = await bcrypt.hash(userData[i].password, salt)
+            const name = userData[i].phoneNumber;
+            userData[i].password = hashedPassword
+            userData[i].userName = name
+            
+            User.bulkCreate([userData[i]])
         }
     }
 }

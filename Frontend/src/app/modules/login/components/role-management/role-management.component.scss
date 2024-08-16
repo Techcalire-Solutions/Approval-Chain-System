@@ -6,7 +6,7 @@ body {
 
 .table {
   width: 100%;
-  margin: 20px auto;
+  // margin: 20px auto;
   border-collapse: separate; /* Use separate to allow corner rounding */
   border-spacing: 0;
   overflow: hidden;
@@ -20,6 +20,8 @@ body {
   color: black;
   border-top-left-radius: 10px; /* Rounded top left corner */
   border-top-right-radius: 10px; /* Rounded top right corner */
+  height: 15px;
+  align-content: center;
 }
 
 .table__body {
@@ -131,3 +133,4 @@ th:nth-child(6), td:nth-child(6) { width: 10%; }
   transform: translate(-50%, -50%);
   z-index: 1000;
 }
+

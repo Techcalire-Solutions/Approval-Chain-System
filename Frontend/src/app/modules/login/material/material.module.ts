@@ -30,6 +30,9 @@ import { MatMenuModule } from '@angular/material/menu';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { BreadcrumbModule } from 'angular-crumbs';
+import {MatChipsModule} from '@angular/material/chips';
+import {MatSortModule} from '@angular/material/sort';
+import {MatTooltipModule} from '@angular/material/tooltip';
 @NgModule({
   declarations: [],
   imports: [
@@ -64,7 +67,10 @@ import { BreadcrumbModule } from 'angular-crumbs';
     MatMenuModule,
     MatProgressBarModule,
     MatProgressSpinnerModule,
-    BreadcrumbModule
+    BreadcrumbModule,
+    MatChipsModule,
+    MatSortModule,
+    MatTooltipModule
   ],
 
   exports: [
@@ -99,7 +105,10 @@ import { BreadcrumbModule } from 'angular-crumbs';
     MatMenuModule,
     MatProgressBarModule,
     MatProgressSpinnerModule,
-    BreadcrumbModule
+    BreadcrumbModule,
+    MatChipsModule,
+    MatSortModule,
+    MatTooltipModule
   ],
   schemas: [NO_ERRORS_SCHEMA]
 

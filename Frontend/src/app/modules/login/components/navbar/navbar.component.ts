@@ -19,11 +19,21 @@ export class NavbarComponent implements OnInit {
     });
   }
 
+  selectedTab: string = '';
+  onTabClick(tabName: string) {
+    this.selectedTab = tabName;
+  }
+
   ngOnInit(): void {
     this.showMenu('nav-toggle', 'nav-menu');
   }
 
   logout(){
-    
+
   }
+
+  onStepSelectionChange(status: string) {
+    console.log(status);
+  }
+
 }

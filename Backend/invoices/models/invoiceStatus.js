@@ -16,6 +16,12 @@ const PerformaInvoiceStatus = sequelize.define('performaInvoiceStatus',{
 PerformaInvoice.hasMany(PerformaInvoiceStatus, {foreignKey : 'performaInvoiceId'})
 PerformaInvoiceStatus.belongsTo(PerformaInvoice);
 
+PerformaInvoiceStatus.sync({ alter: true }).then(() => {
+    console.log('Tables synced successfully.');
+}).catch(err => {
+    console.error('Error syncing tables:', err);
+});
+
 module.exports = PerformaInvoiceStatus;
 
 

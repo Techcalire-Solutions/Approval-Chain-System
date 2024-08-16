@@ -95,9 +95,7 @@ router.get('/:id', authenticateToken, async (req, res) => {
     res.send(role);
   } catch (error) {
     res.send(error.message);
-  }
-
-  
+  }  
 })
 
 router.get('/rolename', authenticateToken, async (req, res) => {

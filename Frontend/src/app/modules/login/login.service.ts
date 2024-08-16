@@ -50,11 +50,12 @@ export class LoginService {
     console.log(localStorage.getItem(this.JWT_TOKEN) as string)
     localStorage.setItem('token', JSON.stringify(tokens))
   }
+
   getJWTToken() {
-    console.log(localStorage.getItem(this.JWT_TOKEN))
     return localStorage.getItem(this.JWT_TOKEN);
 
   }
+
   isLoggedIn(): boolean {
     return !!this.getJWTToken();
 
@@ -74,8 +75,7 @@ export class LoginService {
 
 
 
-   logoutUser()
-   {
+   logoutUser(){
     localStorage.removeItem(this.JWT_TOKEN)
     localStorage.removeItem(this.REFRESH_TOKEN)
     localStorage.removeItem('token')
@@ -127,6 +127,10 @@ export class LoginService {
 
   updateUserStatus(id: number, data: any){
     return this._http.patch<User>(this.url+'/user/statusupdate/' + id, data);
+  }
+
+  getUserByRole(id: number):Observable<User[]>{
+    return this._http.get<User[]>(this.url + '/user/findbyrole/'+id)
   }
 
   // ROLE..........
