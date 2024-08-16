@@ -46,6 +46,7 @@
                     <mat-icon class="icon" [routerLink]="['invoice/update', invoice.id]" *ngIf="sp">delete</mat-icon>
                     <mat-icon class="icon" (click)="verified('approved', invoice.piNo, invoice.salesPerson.name, invoice.id)" *ngIf="!sp && pageStatus">task_alt</mat-icon>
                     <mat-icon class="icon" (click)="verified('rejected', invoice.piNo, invoice.salesPerson.name, invoice.id)" *ngIf="!sp && pageStatus">highlight_off</mat-icon>
+                    <mat-icon class="icon" (click)="addBankSlip(invoice.piNo, invoice.id)" *ngIf="!sp && ma">file_present</mat-icon>
                   </div>
                 </td>
               </tr>

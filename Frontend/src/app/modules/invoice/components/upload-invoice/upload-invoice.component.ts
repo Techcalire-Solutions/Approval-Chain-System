@@ -162,7 +162,11 @@ export class UploadInvoiceComponent implements OnInit, OnDestroy  {
   }
 
   onUpdate(){
+    console.log("Ooooooooooooooooooooooooo");
+
     this.submit = this.invoiceService.addPI(this.piForm.getRawValue()).subscribe((invoice: any) =>{
+      console.log(invoice);
+
       this.snackBar.open(`Performa Invoice ${invoice.piNo} Uploaded succesfully...`,"" ,{duration:3000})
       this.router.navigateByUrl('/home')
     });
