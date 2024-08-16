@@ -9,6 +9,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { Router } from "@angular/router";
 import { VerficationDialogeComponent } from "src/app/modules/invoice/components/verfication-dialoge/verfication-dialoge.component";
 import { MatSnackBar } from "@angular/material/snack-bar";
+import { AttachBankSlipComponent } from "src/app/modules/invoice/components/attach-bank-slip/attach-bank-slip.component";
 
 @Component({
   selector: "app-dashboard",
@@ -69,7 +70,7 @@ export class DashboardComponent implements AfterViewInit {
       this.roleName = role.roleName;
       console.log(this.roleName);
 
-      if(this.roleName === 'Initiator Sales Person') { this.status = ''; this.sp = true }
+      if(this.roleName === 'Initiator Sales Person') { this.status = 'REJECTED'; this.sp = true }
       if(this.roleName === 'Key Account Manager') { this.status = 'GENERATED'; this.kam = true }
       if(this.roleName === 'Authorizer Manager') { this.status = 'KAM VERIFIED'; this.am = true }
       if(this.roleName === 'Maker Accountant') { this.status = 'AM VERIFIED'; this.ma = true }
@@ -78,8 +79,6 @@ export class DashboardComponent implements AfterViewInit {
 
     })
   }
-
-
 
   sortData(sort: Sort) {
       const data = this.rows;
@@ -109,8 +108,6 @@ export class DashboardComponent implements AfterViewInit {
   submittingForm: boolean = false;
 
   getInvoices() {
-    console.log(this.status);
-
     this.submittingForm = true;
     let invoice!: PerformaInvoice[];
 
@@ -123,6 +120,7 @@ export class DashboardComponent implements AfterViewInit {
     } else if (this.roleName === 'Authorizer Manager') {
       apiCall = this.invoiceService.getPIByAM(this.status, this.filterValue, this.currentPage, this.pageSize);
     } else if (this.roleName === 'Maker Accountant') {
+      this.pageStatus = false
       apiCall = this.invoiceService.getPIByMA(this.status, this.filterValue, this.currentPage, this.pageSize);
     }
 
@@ -227,16 +225,19 @@ export class DashboardComponent implements AfterViewInit {
 
     }else if(this.roleName === 'Maker Accountant') {
       if(status === 'pending'){
-        this.pageStatus = true;
+        this.pageStatus = false;
         this.status = 'AM VERIFIED'
         this.getInvoices()
       }else if(status === 'assigned'){
+        this.pageStatus = false;
         this.status = ''
         this.getInvoices()
       }else if(status === 'completed'){
+        this.pageStatus = false;
         this.status = 'BANK SLIP ISSUED'
         this.getInvoices()
       }else if(status === 'all'){
+        this.pageStatus = false;
 
       }
 
@@ -268,15 +269,28 @@ export class DashboardComponent implements AfterViewInit {
           amId: result.amId,
           accountantId: result.accountantId
         }
-        console.log(data);
 
         this.invoiceService.updatePIStatus(data).subscribe(result => {
-          console.log(result);
-
           this.submittingForm = false;
-          this.router.navigateByUrl('/home')
+          this.getInvoices()
           this.snackBar.open(`Invoice ${piNo} updated to ${this.status}...`,"" ,{duration:3000})
         });
+      }
+    })
+  }
+
+  addBankSlip(piNo: string, id: number){
+    const dialogRef = this.dialog.open(AttachBankSlipComponent, {
+      data: { invoiceNo: piNo, id: id }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if(result){
+        this.getInvoices()
+        this.snackBar.open(`BankSlip is attached with Invoice ${piNo} ...`,"" ,{duration:3000})
+        // this.invoiceService.updatePIStatusWithBankSlip(data).subscribe(result => {
+        //   console.log(result);
+        // });
       }
     })
   }
