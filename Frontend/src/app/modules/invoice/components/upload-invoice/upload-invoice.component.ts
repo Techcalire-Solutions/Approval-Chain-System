@@ -156,18 +156,18 @@ export class UploadInvoiceComponent implements OnInit, OnDestroy  {
   submit!: Subscription;
   onSubmit(){
     this.submit = this.invoiceService.addPI(this.piForm.getRawValue()).subscribe((invoice: any) =>{
-      this.snackBar.open(`Performa Invoice ${invoice.piNo} Uploaded succesfully...`,"" ,{duration:3000})
+      console.log(invoice);
+
+      this.snackBar.open(`Performa Invoice ${invoice.p.piNo} Uploaded succesfully...`,"" ,{duration:3000})
       this.router.navigateByUrl('/home')
     });
   }
 
   onUpdate(){
-    console.log("Ooooooooooooooooooooooooo");
-
-    this.submit = this.invoiceService.addPI(this.piForm.getRawValue()).subscribe((invoice: any) =>{
+    this.submit = this.invoiceService.updatePI(this.piForm.getRawValue(), this.id).subscribe((invoice: any) =>{
       console.log(invoice);
 
-      this.snackBar.open(`Performa Invoice ${invoice.piNo} Uploaded succesfully...`,"" ,{duration:3000})
+      this.snackBar.open(`Performa Invoice ${invoice.p.piNo} Uploaded succesfully...`,"" ,{duration:3000})
       this.router.navigateByUrl('/home')
     });
   }

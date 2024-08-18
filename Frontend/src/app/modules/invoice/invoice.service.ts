@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { PerformaInvoice } from './models/performa-invoice';
+import { PerformaInvoiceStatus } from './models/performa-invoice-status';
 
 @Injectable({
   providedIn: 'root'
@@ -52,8 +53,16 @@ export class InvoiceService {
     return this._http.post(this.url + '/performaInvoice/save', data);
   }
 
+  updatePI(data: any, id: number){
+    return this._http.patch(this.url + '/performaInvoice/update/'+ id, data);
+  }
+
   getPIById(id: number): Observable<PerformaInvoice>{
     return this._http.get<PerformaInvoice>(this.url + '/performaInvoice/findbyid/'+id);
+  }
+
+  getPIStatusByPIId(id: number): Observable<PerformaInvoiceStatus>{
+    return this._http.get<PerformaInvoiceStatus>(this.url + '/invoiceStatus/findbypi/'+id);
   }
 
   updatePIStatus(data: any){

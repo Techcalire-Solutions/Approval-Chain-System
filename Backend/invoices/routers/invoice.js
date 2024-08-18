@@ -54,18 +54,18 @@ router.delete('/filedelete', authenticateToken, async (req, res) => {
         pi.url = '';
         await pi.save();
 
-        const piStatusArray = await PerformaInvoiceStatus.findAll({
-          where: { id: req.query.id },
-        });
+        // const piStatusArray = await PerformaInvoiceStatus.findAll({
+        //   where: { id: req.query.id },
+        // });
 
-        if (piStatusArray.length > 0) {
-          for (const piStatus of piStatusArray) {
-            await piStatus.destroy();
-          }
-          console.log('All records deleted.');
-        } else {
-          console.log('No records found.');
-        }
+        // if (piStatusArray.length > 0) {
+        //   for (const piStatus of piStatusArray) {
+        //     await piStatus.destroy();
+        //   }
+        //   console.log('All records deleted.');
+        // } else {
+        //   console.log('No records found.');
+        // }
 
         res.send(pi); // Send the response after the file is deleted and database operations are complete
       });

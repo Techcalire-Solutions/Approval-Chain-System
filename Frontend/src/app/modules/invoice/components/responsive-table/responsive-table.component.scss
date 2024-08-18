@@ -1,210 +1,64 @@
-.table-header {
-    // background-color: #327ebd;
-    // color: white;
-    padding: 0 5px;
-}
-.table-container {
-    padding: 5px 15px 15px 15px;
-}
-.table-component-holder {
-    border: 1px solid #327ebd;
-    background-color: white;
-}
+.main-card {
+  width: 320px;
+  padding: 0;
+  background-color: #f8f9fa;
 
-table {
-    border: 1px solid #ccc;
-    border-collapse: collapse;
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    table-layout: fixed;
-}
-table caption {
-    font-size: 1.5em;
-    margin: .5em 0 .75em;
-    font-family:Roboto,"Helvetica Neue",sans-serif;
-}
-table tr {
-    background: #f8f8f8;
-    border: 1px solid #4d4b4b;
-    padding: .35em;
-}
-table tr:nth-child(odd) td{
-    font-family:Roboto,"Helvetica Neue",sans-serif;
-  }
-table tr:nth-child(even) td{
-    background:rgba(145, 151, 187, 0.34);
-    font-family:Roboto,"Helvetica Neue",sans-serif;
-}
-::ng-deep .mat-sort-header-container{
-        justify-content: center;
-}
-
-table th,
-table td {
-    padding: .625em;
-    text-align: center;
-    font-family:Roboto,"Helvetica Neue",sans-serif;
-}
-table th {
-    background:#cfcfcf;
-    font-size: .85em;
-    letter-spacing: .1em;
-    text-transform: uppercase;
-}
-@media screen and (max-width: 600px) {
-    // table {
-    //      border: 0;
-    // }
-    // table caption {
-    //     font-size: 1.3em;
-    // }
-    table thead {
-        // border: none;
-        // clip: rect(0 0 0 0);
-        // height: 1px;
-        // margin: -1px;
-        overflow: hidden;
-        // padding: 0;
-        position: absolute;
-        width: 1px;
-    }
-    // table tr {
-    //     border-bottom: 3px solid #ddd;
-    //     display: block;
-    //     margin-bottom: .625em;
-    // }
-    table td {
-        border-bottom: 1px solid #ddd;
-        display: block;
-        font-size: .8em;
-        text-align: right;
-        height: 15px;
-    }
-
-    table td:before {
-        /*
-        * aria-label has no advantage, it won't be read inside a table
-        content: attr(aria-label);
-        */
-        content: attr(data-label);
-        float: left;
-        font-weight: bold;
-        text-transform: uppercase;
-    }
-    table td:last-child {
-        border-bottom: 0;
-    }
-
-}
-mat-button-toggle-group{
-    cursor:pointer;
-}
-
-::ng-deep .mat-sort-header-container{
+  mat-toolbar {
+    background-color: #2e3a4a;
+    color: #fff;
+    font-size: 18px;
     justify-content: center;
-}
-/* Structure */
-.example-container {
-  display: flex;
-  flex-direction: column;
-  min-width: 300px;
-}
-
-.example-header {
-  min-height: 64px;
-  display: flex;
-  align-items: center;
-  padding-left: 24px;
-  font-size: 20px;
-}
-
-.mat-table {
-  overflow: auto;
-  max-height: 500px;
-}
-.widgetHolder{
-  margin: 0 auto;
-  .widgetHolder-content {
-    padding: 20px;
   }
-}
 
-.row {
-  display: flex;
-  flex-direction: row;
-}
+  .card-container {
+    padding: 10px;
+    overflow-y: auto;
+    max-height: 70vh;
+  }
 
-.col {
-  flex: 1;
-  margin-right: 20px;
-  width: 100%;
-}
+  .invoice-card {
+    background-color: #e2e9f0;
+    margin-bottom: 10px;
+    border-radius: 8px;
 
-.input-group {
-  display: flex;
-  justify-content: flex-end;
-}
+    .mat-grid-tile {
+      .tile-content {
+        font-size: 14px;
+        font-weight: bold;
+      }
+      .icon-tile {
+        display: flex;
+        justify-content: center;
+        align-items: center;
 
-.input-group input {
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  width: 200px;
-}
+        .material-icons {
+          font-size: 20px;
+          color: #606a7a;
+        }
+      }
+    }
+  }
 
-.action-icons {
-  display: flex;
-  justify-content: space-between;
-  gap: 8px; /* Adjust the gap as needed */
-}
+  .bottom-toolbar {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
 
-html, body {
-  height: 100%;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-}
+    .to-top-btn, .add-new-btn {
+      background-color: #2e3a4a;
+      color: white;
+      border-radius: 20px;
+      padding: 5px 20px;
+      font-size: 14px;
+    }
+  }
 
-.components-container {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh; /* Full viewport height */
-}
-
-html, body {
-  height: 100%;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-}
-
-.components-container {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh; /* Full viewport height */
-}
-
-mat-card {
-  flex-grow: 1; /* Ensure the content takes up all available space */
-}
-
-/* Global styles */
-.footer {
-  background-color: #2b38af;
-  padding: 15px 0;
-}
-
-.footer .mat-tab-group {
-  margin-bottom: 10px;
-}
-
-.icon-container {
-  display: flex;
-  justify-content: space-between;
-}
-
-.icon-container a {
-  flex: 1; /* This allows each icon to take up equal space */
-  text-align: center; /* Centers the icon within its allocated space */
+  .bottom-navigation {
+    display: flex;
+    justify-content: space-around;
+    background-color: #2e3a4a;
+    color: white;
+    font-size: 14px;
+    height: 56px;
+  }
 }
