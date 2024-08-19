@@ -43,4 +43,14 @@ router.post('/updatestatustobankslip', authenticateToken, async (req, res) => {
     }
 })
 
+router.get('/findbypi/:id', authenticateToken, async (req, res) => {
+    try {
+        const piStatus = await PerformaInvoiceStatus.findAll({
+            where: {performaInvoiceId: req.params.id}
+        })
+        res.send(piStatus);
+    } catch (error) {
+        res.send(error.message)
+    }
+})
 module.exports = router

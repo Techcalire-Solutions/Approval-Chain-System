@@ -43,7 +43,6 @@ export class PerformInvoiceComponent implements OnInit, OnDestroy {
   getRoleById(id: number){
     this.roleSub = this.loginService.getRoleById(id).subscribe(role => {
       this.roleName = role.roleName;
-      console.log(this.roleName);
       if(this.roleName === 'Initiator Sales Person') this.sp = true;
       if(this.roleName === 'Key Account Manager') this.kam = true;
       if(this.roleName === 'Authorizer Manager') this.am = true;
@@ -58,13 +57,18 @@ export class PerformInvoiceComponent implements OnInit, OnDestroy {
   bankSlip!: string;
   getPiById(id: number){
     this.piSub = this.invoiceService.getPIById(id).subscribe(pi => {
-      console.log(pi);
-
       this.pi = pi;
       this.piNo = pi.piNo;
       this.url = environment.apiUrl + pi.url;
       if(pi.bankSlip != null) this.bankSlip = environment.apiUrl + pi.bankSlip;
-      console.log(this.bankSlip);
+      this.getPiStatusByPiId(id)
+    });
+  }
+
+  statusSub!: Subscription;
+  getPiStatusByPiId(id: number){
+    this.statusSub = this.invoiceService.getPIStatusByPIId(id).subscribe(status => {
+      console.log(status);
 
     });
   }

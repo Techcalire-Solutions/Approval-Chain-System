@@ -352,16 +352,17 @@ router.patch('/update/:id', authenticateToken, async(req, res) => {
         pi.kamId = kamId;
         let count = pi.count + 1;
         pi.count = count;
+        pi.status = `GENERATED_${count}`;
 
         await pi.save();
 
-        const piId = newPi.id;
+        const piId = pi.id;
         
         const piStatus = new PerformaInvoiceStatus({
-            performaInvoiceId: piId, status: 'GENERATED', date: new Date()
+            performaInvoiceId: piId, status: 'GENERATED', date: new Date(), count: count
         })
         await piStatus.save();
-        res.json({ p: newPi, status: piStatus})
+        res.json({ p: pi, status: piStatus})
     } catch (error) {
         res.send(error.message)
     }
