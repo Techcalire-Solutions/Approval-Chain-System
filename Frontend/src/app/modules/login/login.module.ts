@@ -12,6 +12,7 @@ import { MaterialModule } from './material/material.module';
 import { AddUserComponent } from './components/add-user/add-user.component';
 import { ViewUserComponent } from './components/view-user/view-user.component';
 import { RoleManagementComponent } from './components/role-management/role-management.component';
+import { TrailComponent } from './components/trail/trail.component';
 
 
 @NgModule({
@@ -24,7 +25,8 @@ import { RoleManagementComponent } from './components/role-management/role-manag
       NavbarComponent,
       AddUserComponent,
       ViewUserComponent,
-      RoleManagementComponent
+      RoleManagementComponent,
+      TrailComponent
   ],
   imports: [
     CommonModule,

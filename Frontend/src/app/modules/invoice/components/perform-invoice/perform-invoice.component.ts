@@ -69,7 +69,6 @@ export class PerformInvoiceComponent implements OnInit, OnDestroy {
   getPiStatusByPiId(id: number){
     this.statusSub = this.invoiceService.getPIStatusByPIId(id).subscribe(status => {
       console.log(status);
-
     });
   }
 
