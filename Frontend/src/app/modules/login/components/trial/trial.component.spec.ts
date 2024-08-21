@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TrailComponent } from './trail.component';
+import { TrialComponent } from './trial.component';
 
-describe('TrailComponent', () => {
-  let component: TrailComponent;
-  let fixture: ComponentFixture<TrailComponent>;
+describe('TrialComponent', () => {
+  let component: TrialComponent;
+  let fixture: ComponentFixture<TrialComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ TrailComponent ]
+      declarations: [ TrialComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(TrailComponent);
+    fixture = TestBed.createComponent(TrialComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

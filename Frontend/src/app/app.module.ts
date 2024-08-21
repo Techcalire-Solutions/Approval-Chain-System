@@ -8,6 +8,7 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { MaterialModule } from './modules/login/material/material.module';
 import { DatePipe } from '@angular/common';
 import { TokenInterceptor } from './modules/login/interceptors/token.interceptor';
+import { SafePipe } from './modules/login/safe.pipe';
 
 @NgModule({
   declarations: [

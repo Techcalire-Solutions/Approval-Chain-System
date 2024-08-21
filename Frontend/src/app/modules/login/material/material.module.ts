@@ -33,7 +33,6 @@ import { BreadcrumbModule } from 'angular-crumbs';
 import {MatChipsModule} from '@angular/material/chips';
 import {MatSortModule} from '@angular/material/sort';
 import {MatTooltipModule} from '@angular/material/tooltip';
-import { NgScrollbarModule } from 'ngx-scrollbar';
 
 @NgModule({
   declarations: [],
@@ -72,8 +71,7 @@ import { NgScrollbarModule } from 'ngx-scrollbar';
     BreadcrumbModule,
     MatChipsModule,
     MatSortModule,
-    MatTooltipModule,
-    NgScrollbarModule
+    MatTooltipModule
   ],
 
   exports: [
@@ -111,8 +109,7 @@ import { NgScrollbarModule } from 'ngx-scrollbar';
     BreadcrumbModule,
     MatChipsModule,
     MatSortModule,
-    MatTooltipModule,
-    NgScrollbarModule
+    MatTooltipModule
   ],
   schemas: [NO_ERRORS_SCHEMA]
 

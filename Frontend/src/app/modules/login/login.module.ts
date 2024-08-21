@@ -12,7 +12,9 @@ import { MaterialModule } from './material/material.module';
 import { AddUserComponent } from './components/add-user/add-user.component';
 import { ViewUserComponent } from './components/view-user/view-user.component';
 import { RoleManagementComponent } from './components/role-management/role-management.component';
-import { TrailComponent } from './components/trail/trail.component';
+import { TrialComponent } from './components/trial/trial.component';
+import { ApplicationsComponent } from './components/applications/applications.component';
+import { UserMenuComponent } from './components/user-menu/user-menu.component';
 
 
 @NgModule({
@@ -26,7 +28,9 @@ import { TrailComponent } from './components/trail/trail.component';
       AddUserComponent,
       ViewUserComponent,
       RoleManagementComponent,
-      TrailComponent
+      TrialComponent,
+      ApplicationsComponent,
+      UserMenuComponent
   ],
   imports: [
     CommonModule,
