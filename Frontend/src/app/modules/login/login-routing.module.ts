@@ -7,13 +7,12 @@ import { AddUserComponent } from './components/add-user/add-user.component';
 import { ViewUserComponent } from './components/view-user/view-user.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { ResponsiveTableComponent } from '../invoice/components/responsive-table/responsive-table.component';
-import { TrialComponent } from './components/trial/trial.component';
 
 const routes: Routes = [
   {path: '', component: LoginComponent},
-  {path: 'home', component: TrialComponent, data: {breadcrumb: 'Home'},
+  {path: 'home', component: NavbarComponent, data: {breadcrumb: 'Home'},
     children: [
-      // {path: '', component: DashboardComponent},
+      {path: '', component: DashboardComponent},
       {path: 'user',  data: {breadcrumb: 'User'}, children: [
         {path: '', component: ViewUserComponent,},
         {path: 'add', component: AddUserComponent, data: {breadcrumb: 'Add'}},
