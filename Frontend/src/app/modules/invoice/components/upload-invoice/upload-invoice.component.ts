@@ -8,6 +8,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { LoginService } from 'src/app/modules/login/login.service';
 import { User } from 'src/app/modules/login/models/user';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-upload-invoice',
@@ -18,7 +19,7 @@ export class UploadInvoiceComponent implements OnInit, OnDestroy  {
   url = environment.apiUrl;
 
   constructor(private invoiceService: InvoiceService, private fb: FormBuilder, private snackBar: MatSnackBar, private router: Router,
-    private route: ActivatedRoute, private loginServie: LoginService
+    private route: ActivatedRoute, private loginServie: LoginService, private sanitizer: DomSanitizer
   ){}
 
   ngOnDestroy(): void {
@@ -72,11 +73,13 @@ export class UploadInvoiceComponent implements OnInit, OnDestroy  {
   uploadComplete: boolean = false;
   file!: any;
   uploadSub!: Subscription;
+  fileType: string = '';
   imageUrl!: string;
+  public safeUrl!: SafeResourceUrl;
   uploadFile(event: Event) {
     const input = event.target as HTMLInputElement;
     this.file = input.files?.[0];
-
+    this.fileType = this.file.type.split('/')[1];
     if (this.file) {
       this.uploadComplete = false; // Set to false to show the progress bar
 
@@ -89,6 +92,9 @@ export class UploadInvoiceComponent implements OnInit, OnDestroy  {
       this.uploadSub = this.invoiceService.uploadInvoice(this.file).subscribe({
         next: (invoice) => {
           this.imageUrl = this.url + invoice.fileUrl;
+          if (this.imageUrl) {
+            this.safeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.imageUrl);
+          }
           this.piForm.get('url')?.setValue(invoice.fileUrl);
           this.uploadComplete = true; // Set to true when upload is complete
         },

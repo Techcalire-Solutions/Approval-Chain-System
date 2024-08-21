@@ -23,8 +23,7 @@ import { RoleManagementComponent } from './components/role-management/role-manag
       NavbarComponent,
       AddUserComponent,
       ViewUserComponent,
-      RoleManagementComponent,
-
+      RoleManagementComponent
   ],
   imports: [
     CommonModule,

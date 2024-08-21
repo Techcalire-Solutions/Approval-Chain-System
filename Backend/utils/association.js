@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt');
 
 
 async function syncModel() {
-    await sequelize.sync({force: true})
+    await sequelize.sync({alter: true})
 
     const roleData = [
         {roleName: 'Initiator Sales Person'},

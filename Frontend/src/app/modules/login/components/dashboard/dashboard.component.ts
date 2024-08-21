@@ -34,6 +34,7 @@ export class DashboardComponent implements AfterViewInit {
   @Output() dup = new EventEmitter();
 
   selectedTab: string = '';
+  header: string = 'Invoices';
   onTabClick(tabName: string) {
     this.selectedTab = tabName;
   }
@@ -179,13 +180,17 @@ export class DashboardComponent implements AfterViewInit {
       if(status === 'assigned'){
         this.status = '';
         this.getInvoices();
+        this.header = 'Assigned Invoices';
       }else if(status === 'pending'){
+        this.header = 'Pending Invoices';
         this.status = 'REJECTED';
         this.getInvoices()
       }else if(status === 'completed'){
+        this.header = 'Completed Invoices';
         this.status = 'BANK SLIP ISSUED';
         this.getInvoices()
       }else if(status === 'all'){
+        this.header = 'All Invoices'
       }
     }else if(this.roleName === 'Key Account Manager') {
       if(status === 'pending'){

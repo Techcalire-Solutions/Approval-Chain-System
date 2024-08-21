@@ -9,10 +9,12 @@ import { PerformInvoiceComponent } from './components/perform-invoice/perform-in
 import { VerficationDialogeComponent } from './components/verfication-dialoge/verfication-dialoge.component';
 import { AttachBankSlipComponent } from './components/attach-bank-slip/attach-bank-slip.component';
 import { ResponsiveTableComponent } from './components/responsive-table/responsive-table.component';
+import { SafePipe } from '../login/safe.pipe';
 
 
 @NgModule({
   declarations: [
+    SafePipe,
     UploadInvoiceComponent,
     ViewInvoicesComponent,
     PerformInvoiceComponent,
