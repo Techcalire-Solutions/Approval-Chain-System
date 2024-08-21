@@ -12,10 +12,6 @@ import { MaterialModule } from './material/material.module';
 import { AddUserComponent } from './components/add-user/add-user.component';
 import { ViewUserComponent } from './components/view-user/view-user.component';
 import { RoleManagementComponent } from './components/role-management/role-management.component';
-import { TrialComponent } from './components/trial/trial.component';
-import { ApplicationsComponent } from './components/applications/applications.component';
-import { UserMenuComponent } from './components/user-menu/user-menu.component';
-
 
 @NgModule({
   declarations: [
@@ -27,10 +23,7 @@ import { UserMenuComponent } from './components/user-menu/user-menu.component';
       NavbarComponent,
       AddUserComponent,
       ViewUserComponent,
-      RoleManagementComponent,
-      TrialComponent,
-      ApplicationsComponent,
-      UserMenuComponent
+      RoleManagementComponent
   ],
   imports: [
     CommonModule,
