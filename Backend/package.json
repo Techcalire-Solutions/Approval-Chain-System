@@ -13,7 +13,7 @@
   "dependencies": {
     "@auth0/angular-jwt": "^5.1.2",
     "backend": "file:",
-    "bcrypt": "^5.1.0",
+    "bcrypt": "^5.1.1",
     "cloudinary": "^1.40.0",
     "convert-excel-to-json": "^1.7.0",
     "cors": "^2.8.5",
