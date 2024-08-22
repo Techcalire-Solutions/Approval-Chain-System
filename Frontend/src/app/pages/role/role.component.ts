@@ -1,101 +1,51 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { UsersService } from '@services/users.service';
-
-import { Settings, SettingsService } from '@services/settings.service';
-import { MatDialog } from '@angular/material/dialog';
-
-import { FlexLayoutModule } from '@ngbracket/ngx-layout';
-import { MatButtonModule } from '@angular/material/button';
-import { MatButtonToggleModule } from '@angular/material/button-toggle';
-import { MatIconModule } from '@angular/material/icon';
-import { MatFormFieldModule } from '@angular/material/form-field';
+import { Component } from '@angular/core';
 import { MatInputModule } from '@angular/material/input';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { FormsModule } from '@angular/forms';
-import { NgxPaginationModule } from 'ngx-pagination';
-import { MatMenuModule } from '@angular/material/menu';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { PipesModule } from '../../theme/pipes/pipes.module';
-import { MatCardModule } from '@angular/material/card';
-import { DatePipe } from '@angular/common';
-import { UserDialogComponent } from '../users/user-dialog/user-dialog.component';
-import { Role } from '../../common/interfaces/role';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { RoleService } from '@services/role.service';
+import { TablesService, Element } from '@services/tables.service';
+export interface PeriodicElement {
+  name: string;
+  position: number;
+  weight: number;
+  symbol: string;
+}
 
+const ELEMENT_DATA: PeriodicElement[] = [
+  {position: 1, name: 'Sales Executive', weight: 1.0079, symbol: 'H'},
+  {position: 2, name: 'Key Account Manger', weight: 4.0026, symbol: 'He'},
+  {position: 3, name: 'Authorizer Manger', weight: 6.941, symbol: 'Li'},
+  {position: 4, name: 'Finance Executive', weight: 9.0122, symbol: 'Be'},
+ 
+];
 @Component({
   selector: 'app-role',
   standalone: true,
-  imports: [ 
-    FormsModule,
-    FlexLayoutModule,
-    MatButtonModule,
-    MatButtonToggleModule,
-    MatIconModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatProgressSpinnerModule,
-    MatMenuModule,
-    MatSlideToggleModule,
-    MatCardModule,
-    NgxPaginationModule,
-    PipesModule,
-    DatePipe,  
-    UserDialogComponent
+  imports: [
+    MatTableModule,
+    MatInputModule    
   ],
   templateUrl: './role.component.html',
-  styleUrl: './role.component.scss',
-  encapsulation: ViewEncapsulation.None,
-  providers: [UsersService]
+  providers: [
+    TablesService
+  ]
 })
-export class RoleComponent implements OnInit {
-  public role: Role[] | null;
-  public searchText: string;
-  public page:any;
-  public settings: Settings;
-  constructor(public settingsService: SettingsService, 
-              public dialog: MatDialog,
-              public usersService: UsersService){
-    this.settings = this.settingsService.settings; 
-  }
+export class RoleComponent {
+  displayedColumns: string[] = ['position', 'name'];
+  dataSource = ELEMENT_DATA;
 
-  ngOnInit() {
-    this.getUsers();         
+  // public displayedColumns = ['position', 'name'];
+  // public dataSource: any; 
+  constructor(private tablesService: TablesService,private roleService:RoleService) { 
+    // this.dataSource = new MatTableDataSource<Element>(this.tablesService.getData());
   }
-users :any;
-  public getUsers(): void {
-    this.role = null; 
-    // this.usersService.getUsers().subscribe(role => this.role = role);    
-  }
-  public addUser(user:Role){
-    // this.usersService.addUser(user).subscribe(user => this.getUsers());
-  }
-  public updateUser(user:Role){
-    // this.usersService.updateUser(user).subscribe(user => this.getUsers());
-  }
-  public deleteUser(user:Role){
-    this.usersService.deleteUser(user.id).subscribe(user => this.getUsers());
-  }
+  
+  ngOnInit(){
+    this.roleService.getRole().subscribe((res)=>{
+      console.log(res)
+  })}
 
 
-  public onPageChanged(event: any){
-    this.page = event;
-    this.getUsers();
-    if(this.settings.fixedHeader){      
-        document.getElementById('main-content')!.scrollTop = 0;
-    }
-    else{
-        document.getElementsByClassName('mat-drawer-content')[0].scrollTop = 0;
-    }
+  applyFilter(filterValue: string) { 
+    // this.dataSource.filter = filterValue.trim().toLowerCase();
   }
-
-  public openUserDialog(user: any){
-    let dialogRef = this.dialog.open(UserDialogComponent, {
-      data: user
-    });
-    dialogRef.afterClosed().subscribe(user => {
-      if(user){
-          (user.id) ? this.updateUser(user) : this.addUser(user);
-      }
-    });
-  }
-
 }

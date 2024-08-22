@@ -29,16 +29,12 @@ export class VerticalMenuComponent implements OnInit {
   @Output() onClickMenuItem:EventEmitter<any> = new EventEmitter<any>();
   parentMenu:Array<any>;
   public settings: Settings;
-  constructor(public settingsService: SettingsService, public menuService:MenuService, public router:Router) {
+  constructor(public settingsService: SettingsService, public menuService:MenuService, public router:Router) { 
     this.settings = this.settingsService.settings;
   }
 
-  ngOnInit() {
-    console.log(this.menuParentId);
-    console.log(this.menuItems);
-
-    this.parentMenu = this.menuItems.filter(item => item.parentId == this.menuParentId);
-    console.log(this.parentMenu);
+  ngOnInit() {     
+    this.parentMenu = this.menuItems.filter(item => item.parentId == this.menuParentId);  
   }
 
   ngAfterViewInit(){
@@ -53,14 +49,14 @@ export class VerticalMenuComponent implements OnInit {
         else{
           document.getElementsByClassName('mat-drawer-content')[0].scrollTop = 0;
         }
-      }
+      }                
     });
   }
 
   onClick(menuId: any){
     this.menuService.toggleMenuItem(menuId);
     this.menuService.closeOtherSubMenus(this.menuItems, menuId);
-    this.onClickMenuItem.emit(menuId);
+    this.onClickMenuItem.emit(menuId);     
   }
 
 }

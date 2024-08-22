@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ViewChild, ViewEncapsulation } from '@angular/core';
-import { Router, NavigationEnd, RouterModule } from '@angular/router';
+import { Router, NavigationEnd, RouterModule } from '@angular/router'; 
 import { MatMenuTrigger } from '@angular/material/menu';
 import { MenuService } from '../../../../services/menu.service';
 import { Settings, SettingsService } from '../../../../services/settings.service';
@@ -27,14 +27,13 @@ export class HorizontalMenuComponent implements OnInit {
   public menuItems: Array<any>;
   public settings: Settings;
   @ViewChild(MatMenuTrigger) trigger: MatMenuTrigger;
-  constructor(public settingsService: SettingsService, public menuService: MenuService, public router:Router) {
+  constructor(public settingsService: SettingsService, public menuService: MenuService, public router:Router) { 
     this.settings = this.settingsService.settings;
   }
 
   ngOnInit() {
     this.menuItems = this.menuService.getHorizontalMenuItems();
     this.menuItems = this.menuItems.filter(item => item.parentId == this.menuParentId);
-    console.log(this.menuItems);
   }
 
   ngAfterViewInit(){
@@ -49,8 +48,8 @@ export class HorizontalMenuComponent implements OnInit {
         else{
           document.getElementsByClassName('mat-drawer-content')[0].scrollTop = 0;
         }
-      }
+      }                
     });
-  }
+  } 
 
 }

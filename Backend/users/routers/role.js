@@ -6,7 +6,7 @@ const { Op, fn, col, where } = require('sequelize');
 const sequelize = require('../../utils/db');
 
 
-router.post('/', authenticateToken, async (req, res) => {
+router.post('/', async (req, res) => {
     try {
             const { roleName, status } = req.body;
 
@@ -21,7 +21,7 @@ router.post('/', authenticateToken, async (req, res) => {
     }
 })
 
-router.get('/', authenticateToken, async (req, res) => {
+router.get('/', async (req, res) => {
   console.log("GET API------INITIAL 1 ")
   try {
     console.log("GET API------INITIAL  2")
@@ -182,7 +182,7 @@ router.patch('/statusupdate/:id', authenticateToken, async(req,res)=>{
     }
 })
 
-router.get('/search/name', authenticateToken, async (req, res) => {
+router.get('/search/name', async (req, res) => {
   try {
     let whereClause = {};
     if (req.query.search) {
