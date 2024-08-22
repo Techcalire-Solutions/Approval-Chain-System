@@ -9,6 +9,7 @@ import { VerficationDialogeComponent } from '../verfication-dialoge/verfication-
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AttachBankSlipComponent } from '../attach-bank-slip/attach-bank-slip.component';
 import { LoginService } from 'src/app/modules/login/login.service';
+import { PerformaInvoiceStatus } from '../../models/performa-invoice-status';
 
 @Component({
   selector: 'app-perform-invoice',
@@ -66,10 +67,18 @@ export class PerformInvoiceComponent implements OnInit, OnDestroy {
   }
 
   statusSub!: Subscription;
+  status: PerformaInvoiceStatus[] = [];
   getPiStatusByPiId(id: number){
-    this.statusSub = this.invoiceService.getPIStatusByPIId(id).subscribe(status => {
+    this.statusSub = this.invoiceService.getPIStatusByPIId(id, this.filterValue).subscribe(status => {
       console.log(status);
+      this.status = status;
     });
+  }
+
+  filterValue: string = '';
+  applyFilter(event: Event): void {
+    this.filterValue = (event.target as HTMLInputElement).value.trim()
+    this.getPiById(this.route.snapshot.params['id'])
   }
 
   submittingForm: boolean = false;
