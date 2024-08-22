@@ -7,7 +7,7 @@ const Role = require('../models/role')
 const {Op, fn, col, where} = require('sequelize');
 const sequelize = require('../../utils/db'); 
 
-router.post('/add', async (req, res) => {
+router.post('/add', authenticateToken, async (req, res) => {
   console.log(req.body);
   const { name, email, phoneNumber, password, roleId, status} = req.body;
   try {
@@ -34,7 +34,7 @@ router.post('/add', async (req, res) => {
   }
 })
 
-router.get('/find/', async (req, res) => {
+router.get('/find/', authenticateToken, async (req, res) => {
   try {
     let whereClause = {}
     let limit;
@@ -122,7 +122,7 @@ router.get('/find/', async (req, res) => {
   }
 });
 
-router.get('/search/name', async (req, res) => {
+router.get('/search/name', authenticateToken, async (req, res) => {
   try {
     let whereClause = {};
     if (req.query.search) {
@@ -150,7 +150,7 @@ router.get('/search/name', async (req, res) => {
   }
 });
 
-router.patch('/statusupdate/:id', async(req,res)=>{
+router.patch('/statusupdate/:id', authenticateToken, async(req,res)=>{
   try {
     let status = req.body.status;
     let result = await User.findByPk(req.params.id);
@@ -162,7 +162,7 @@ router.patch('/statusupdate/:id', async(req,res)=>{
     }
 })
 
-router.get('/findone/:id', async(req,res)=>{
+router.get('/findone/:id', authenticateToken, async(req,res)=>{
   let id = req.params.id;
   try {
     const user = await User.findByPk(id);
@@ -172,7 +172,7 @@ router.get('/findone/:id', async(req,res)=>{
   }
 });
 
-router.patch('/update/:id', async(req,res)=>{
+router.patch('/update/:id', authenticateToken, async(req,res)=>{
   const { name, email, phoneNumber, password, roleId, status} = req.body;
   const pass = await bcrypt.hash(password, 10);
   try {
@@ -212,7 +212,7 @@ router.delete('/delete/:id', authenticateToken, async(req, res)=>{
     }
 })
 
-router.get('/findbyrole/:id', async (req, res) => {
+router.get('/findbyrole/:id', authenticateToken, async (req, res) => {
   try {
     const user = await User.findAll({
       where: {roleId: req.params.id}

@@ -6,7 +6,7 @@ const sequelize = require('../utils/db');
 const path = require('path');
 
 dotenv.config();
-app.use(cors({orgin:'*'}))
+app.use(cors({ origin: '*' }));
 app.use(express.json());
 
 const syncModel = require('../utils/association')

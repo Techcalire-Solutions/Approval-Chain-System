@@ -6,7 +6,7 @@ const { Op, fn, col, where } = require('sequelize');
 const sequelize = require('../../utils/db');
 
 
-router.post('/', async (req, res) => {
+router.post('/', authenticateToken, async (req, res) => {
     try {
             const { roleName, status } = req.body;
 
@@ -21,72 +21,85 @@ router.post('/', async (req, res) => {
     }
 })
 
-router.get('/find', async (req, res) => {
+router.get('/', authenticateToken, async (req, res) => {
+  console.log("GET API------INITIAL 1 ")
   try {
-    let whereClause = {}
-    let limit;
-    let offset;
-    
-    if (req.query.pageSize != 'undefined' && req.query.page != 'undefined') {
-      limit = req.query.pageSize;
-      offset = (req.query.page - 1) * req.query.pageSize;
-      if (req.query.search != 'undefined') {
-        const searchTerm = req.query.search.replace(/\s+/g, '').trim().toLowerCase();
-        whereClause = {
-          [Op.or]: [
-            sequelize.where(
-              sequelize.fn('LOWER', sequelize.fn('REPLACE', sequelize.col('roleName'), ' ', '')),
-              {
-                [Op.like]: `%${searchTerm}%`
-              }
-            )
-          ]
-        };
-      }
-    } else {
-      if (req.query.search != 'undefined') {
-        const searchTerm = req.query.search.replace(/\s+/g, '').trim().toLowerCase();
-        whereClause = {
-          [Op.or]: [
-            sequelize.where(
-              sequelize.fn('LOWER', sequelize.fn('REPLACE', sequelize.col('roleName'), ' ', '')),
-              {
-                [Op.like]: `%${searchTerm}%`
-              }
-            )
-          ], 
-          status: true
-        };
-      } else {
-        whereClause = {
-          status: true
-        };
-      }
-    }
-
-    const role = await Role.findAll({
-      order:['id'], limit, offset, where: whereClause
-    })
-
-    let totalCount;
-    totalCount = await Role.count({where: whereClause});
-    
-    if (req.query.page != 'undefined' && req.query.pageSize != 'undefined') {
-      const response = {
-        count: totalCount,
-        items: role,
-      };
-
-      res.json(response);
-    } else {
-      res.json(role);
-    }
+    console.log("GET API------INITIAL  2")
+    const roles = await Role.findAll({});
+    console.log("ROLES------------------",roles)
+    res.send(roles);
   } catch (error) {
-    res.send(error.message);
+    res.status(500).send({ error: error.message });
   }
+});
 
 
-})
+// router.get('/find', async (req, res) => {
+//   try {
+//     let whereClause = {}
+//     let limit;
+//     let offset;
+    
+//     if (req.query.pageSize != 'undefined' && req.query.page != 'undefined') {
+//       limit = req.query.pageSize;
+//       offset = (req.query.page - 1) * req.query.pageSize;
+//       if (req.query.search != 'undefined') {
+//         const searchTerm = req.query.search.replace(/\s+/g, '').trim().toLowerCase();
+//         whereClause = {
+//           [Op.or]: [
+//             sequelize.where(
+//               sequelize.fn('LOWER', sequelize.fn('REPLACE', sequelize.col('roleName'), ' ', '')),
+//               {
+//                 [Op.like]: `%${searchTerm}%`
+//               }
+//             )
+//           ]
+//         };
+//       }
+//     } else {
+//       if (req.query.search != 'undefined') {
+//         const searchTerm = req.query.search.replace(/\s+/g, '').trim().toLowerCase();
+//         whereClause = {
+//           [Op.or]: [
+//             sequelize.where(
+//               sequelize.fn('LOWER', sequelize.fn('REPLACE', sequelize.col('roleName'), ' ', '')),
+//               {
+//                 [Op.like]: `%${searchTerm}%`
+//               }
+//             )
+//           ], 
+//           status: true
+//         };
+//       } else {
+//         whereClause = {
+//           status: true
+//         };
+//       }
+//     }
+
+//     const role = await Role.findAll({
+//       order:['id'], limit, offset, where: whereClause
+//     })
+
+//     let totalCount;
+//     totalCount = await Role.count({where: whereClause});
+    
+//     if (req.query.page != 'undefined' && req.query.pageSize != 'undefined') {
+//       const response = {
+//         count: totalCount,
+//         items: role,
+//       };
+
+//       res.json(response);
+//     } else {
+//       res.json(role);
+//     }
+//   } catch (error) {
+//     res.send(error.message);
+//   }
+
+
+// })
 
 router.get('/:id', authenticateToken, async (req, res) => {
   try {
@@ -169,7 +182,7 @@ router.patch('/statusupdate/:id', authenticateToken, async(req,res)=>{
     }
 })
 
-router.get('/search/name', async (req, res) => {
+router.get('/search/name', authenticateToken, async (req, res) => {
   try {
     let whereClause = {};
     if (req.query.search) {

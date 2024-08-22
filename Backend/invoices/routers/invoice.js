@@ -90,7 +90,7 @@ const deleteFile = (filePath) => {
   });
 };
 
-router.delete('/filedelete/:id', async (req, res) => {
+router.delete('/filedelete/:id', authenticateToken, async (req, res) => {
   let id = req.params.id;
   try {
     const pi = await PerformaInvoice.findByPk(id);
